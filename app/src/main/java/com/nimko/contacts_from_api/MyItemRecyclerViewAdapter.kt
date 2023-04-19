@@ -16,13 +16,7 @@ class MyItemRecyclerViewAdapter(
     val click:Clickable
 ) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>() {
 
-   val values: MutableList<Person> = listOf(
-        Person("Ivan","Ivanov","+123456789","qwer@ty","fff",null),
-        Person("Petr","Petrenko","+89533449","ert@ty","fff",null),
-        Person("Stepa","Stepanenko","+4525429","errrrtr@ty","fff",null),
-        Person("Sophy","Popovich","+72727245","yth@ty","fff",null),
-        Person("Mary","Lavis","+24524452425","drgr@ty","fff",null)
-    ) as MutableList<Person>
+   var values: MutableList<Person> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
@@ -43,6 +37,11 @@ class MyItemRecyclerViewAdapter(
         holder.itemView.setOnClickListener {
             click.onClick(item)
         }
+    }
+
+    fun addNewPerson(person:Person){
+        values.add(person)
+        this.notifyDataSetChanged()
     }
 
 

@@ -1,7 +1,5 @@
 package com.nimko.contacts_from_api.model
 
-import java.time.LocalDateTime
-
 
 data class Person(
     val firstName : String,
@@ -9,5 +7,5 @@ data class Person(
     val phoneNumber : String,
     val email : String,
     val app : String,
-    val date : LocalDateTime?
+    val date : String?
 ):java.io.Serializable

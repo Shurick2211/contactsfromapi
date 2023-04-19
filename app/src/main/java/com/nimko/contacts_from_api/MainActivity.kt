@@ -12,6 +12,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nimko.contacts_from_api.databinding.ActivityMainBinding
 import com.nimko.contacts_from_api.model.Person
+import okhttp3.internal.wait
+import java.lang.Thread.sleep
 
 class MainActivity : AppCompatActivity(), MyItemRecyclerViewAdapter.Clickable {
 
@@ -19,6 +21,7 @@ class MainActivity : AppCompatActivity(), MyItemRecyclerViewAdapter.Clickable {
     private val adapter: MyItemRecyclerViewAdapter = MyItemRecyclerViewAdapter( this)
     private var startForResult:ActivityResultLauncher<Intent>? = null
 
+    private val apiClient:ApiClient = ApiClient()
 
 
 
@@ -32,13 +35,22 @@ class MainActivity : AppCompatActivity(), MyItemRecyclerViewAdapter.Clickable {
                 val intent = result.data
                 var person = intent?.getSerializableExtra("new_person") as Person
                 Log.d("My log", person.toString())
-                //adapter.values.add(person)
+                adapter.addNewPerson(person)
             }
         }
-
     }
 
     private fun listInit() {
+        Log.d("Api HTTP get all",apiClient.getAllContacts())
+        sleep(1000)
+        Log.d("Api HTTP get all",apiClient.persons.toString())
+        adapter.values = mutableListOf(
+            Person("Ivan","Ivanov","+123456789","qwer@ty",getString(R.string.app_name),null),
+            Person("Petr","Petrenko","+89533449","ert@ty",getString(R.string.app_name),null),
+            Person("Stepa","Stepanenko","+4525429","errrrtr@ty",getString(R.string.app_name),null),
+            Person("Sophy","Popovich","+72727245","yth@ty",getString(R.string.app_name),null),
+            Person("Mary","Lavis","+24524452425","drgr@ty",getString(R.string.app_name),null)
+        )
         binding.list.layoutManager = LinearLayoutManager(this)
         binding.list.adapter = adapter;
     }
