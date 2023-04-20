@@ -41,18 +41,19 @@ class MainActivity : AppCompatActivity(), MyItemRecyclerViewAdapter.Clickable {
     }
 
     private fun listInit() {
-        Log.d("Api HTTP get all",apiClient.getAllContacts())
-        sleep(1000)
-        Log.d("Api HTTP get all",apiClient.persons.toString())
+       apiClient.getAllContacts(adapter)
+       /*
         adapter.values = mutableListOf(
             Person("Ivan","Ivanov","+123456789","qwer@ty",getString(R.string.app_name),null),
             Person("Petr","Petrenko","+89533449","ert@ty",getString(R.string.app_name),null),
             Person("Stepa","Stepanenko","+4525429","errrrtr@ty",getString(R.string.app_name),null),
             Person("Sophy","Popovich","+72727245","yth@ty",getString(R.string.app_name),null),
             Person("Mary","Lavis","+24524452425","drgr@ty",getString(R.string.app_name),null)
-        )
+        )*/
         binding.list.layoutManager = LinearLayoutManager(this)
         binding.list.adapter = adapter;
+        sleep(1000)
+        adapter.refresh()
     }
 
     override fun onClick(item: Person) {

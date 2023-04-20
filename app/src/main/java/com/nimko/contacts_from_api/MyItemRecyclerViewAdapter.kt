@@ -1,9 +1,12 @@
 package com.nimko.contacts_from_api
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.nimko.contacts_from_api.databinding.FragmentItemBinding
 import com.nimko.contacts_from_api.model.Person
 
@@ -14,7 +17,7 @@ import com.nimko.contacts_from_api.model.Person
  */
 class MyItemRecyclerViewAdapter(
     val click:Clickable
-) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>(),Requestable {
 
    var values: MutableList<Person> = ArrayList()
 
@@ -41,6 +44,10 @@ class MyItemRecyclerViewAdapter(
 
     fun addNewPerson(person:Person){
         values.add(person)
+        refresh()
+    }
+
+    fun refresh(){
         this.notifyDataSetChanged()
     }
 
@@ -58,5 +65,12 @@ class MyItemRecyclerViewAdapter(
 
     interface Clickable{
         fun onClick(item: Person)
+    }
+
+    override fun getRequest(request: String) {
+        val sType = object : TypeToken<List<Person>>() { }.type
+        val persons = Gson().fromJson<List<Person>>(request, sType)
+        Log.d("LIST", persons.toString())
+        values.addAll(persons)
     }
 }

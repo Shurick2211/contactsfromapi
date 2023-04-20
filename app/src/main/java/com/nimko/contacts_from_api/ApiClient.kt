@@ -18,48 +18,45 @@ import java.io.IOException
 import java.lang.reflect.Type
 
 class ApiClient {
-    val url = "http://contacts-book.eba-skm39mww.eu-central-1.elasticbeanstalk.com/contacts"
-    var persons:List<Person> = ArrayList()
+    private val url = "http://contacts-book.eba-skm39mww.eu-central-1.elasticbeanstalk.com/contacts"
     private val client: OkHttpClient = OkHttpClient()
 
-    fun createContact(person:Person):String{
-       // val personJson = Gson().fromJson(post(person),Person::class.java)
-        Log.d("Create JSON", post(person))
-        return ""
+    fun createContact(person:Person, apiRequest: Requestable):String{
+        return post(person, apiRequest)
     }
 
-    fun getAllContacts():String{
-        return get(url)
+    fun getAllContacts(apiRequest: Requestable):String{
+        return get(url, apiRequest)
     }
 
-    fun getContactByEmail(email:String):String{
+    fun getContactByEmail(email:String, apiRequest: Requestable):String{
 
-        return get("$url/$email")
+        return get("$url/$email", apiRequest)
     }
 
-    fun getContactByPhone(phone:String):String{
+    fun getContactByPhone(phone:String, apiRequest: Requestable):String{
 
-        return get("$url/phones?phone=$phone")
+        return get("$url/phones?phone=$phone", apiRequest)
     }
 
-    private fun get(url:String):String{
+    private fun get(url:String, apiRequest: Requestable):String{
         val request =  Request.Builder()
             .url(url)
             .build();
-        return execHttpAsync(request)
+        return execHttpAsync(request, apiRequest)
     }
 
-    private fun post(person:Person):String{
+    private fun post(person:Person, apiRequest: Requestable):String{
         val jsonRequest = GsonBuilder().create().toJson(person,Person::class.java)
         Log.d("Request Json", jsonRequest)
         val JSON = "application/json; charset=utf-8".toMediaType()
         val body: RequestBody = jsonRequest.toRequestBody(JSON)
         val request = Request.Builder().url(url).post(body).build()
-        return execHttpAsync(request)
+        return execHttpAsync(request, apiRequest)
     }
 
-    private fun execHttpAsync(request: Request):String{
-        var result = "undefined"
+    private fun execHttpAsync(request: Request, apiRequest: Requestable):String{
+        var result = ""
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
@@ -68,18 +65,15 @@ class ApiClient {
 
             override fun onResponse(call: Call, response: Response) {
                 response.use {
-
                     if (!response.isSuccessful) {
-                        Log.e("Error http",
-                                " ${response.code} ${response.message}")
-                        result = response.message
+                        result = response.body?.string() ?: "$response.code"
+                        Log.w("Error http",
+                            " ${response.code} ${result}")
                     } else {
                         result = response.body!!.string()
                         Log.d("Http OK", result)
-                        val sType = object : TypeToken<List<Person>>() { }.type
-                        persons = Gson().fromJson(result, sType)
-                        Log.d("LIST", persons.toString())
                     }
+                    apiRequest.getRequest(result)
                 }
             }
         })
@@ -87,22 +81,4 @@ class ApiClient {
         return result
     }
 
-    private fun execHttpSync(request: Request):String {
-        var result = "undefined"
-        try {
-            client.newCall(request).execute().use { response ->
-                if (!response.isSuccessful) {
-                    Log.e("Error http",
-                        " ${response.code} ${response.message}")
-                    result = response.message
-                } else {
-                    result = response.body!!.string()
-                    Log.d("Http OK", result)
-                }
-            }
-        } catch (e: IOException) {
-            Log.e("Error http", e.stackTraceToString())
-        }
-        return result
-    }
 }
