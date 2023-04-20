@@ -19,7 +19,7 @@ class MyItemRecyclerViewAdapter(
     val click:Clickable
 ) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>(),Requestable {
 
-   var values: MutableList<Person> = ArrayList()
+   var  values: MutableList<Person> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 

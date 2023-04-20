@@ -9,6 +9,9 @@ import android.view.View
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nimko.contacts_from_api.databinding.ActivityMainBinding
 import com.nimko.contacts_from_api.model.Person
@@ -41,15 +44,7 @@ class MainActivity : AppCompatActivity(), MyItemRecyclerViewAdapter.Clickable {
     }
 
     private fun listInit() {
-       apiClient.getAllContacts(adapter)
-       /*
-        adapter.values = mutableListOf(
-            Person("Ivan","Ivanov","+123456789","qwer@ty",getString(R.string.app_name),null),
-            Person("Petr","Petrenko","+89533449","ert@ty",getString(R.string.app_name),null),
-            Person("Stepa","Stepanenko","+4525429","errrrtr@ty",getString(R.string.app_name),null),
-            Person("Sophy","Popovich","+72727245","yth@ty",getString(R.string.app_name),null),
-            Person("Mary","Lavis","+24524452425","drgr@ty",getString(R.string.app_name),null)
-        )*/
+        apiClient.getAllContacts(adapter)
         binding.list.layoutManager = LinearLayoutManager(this)
         binding.list.adapter = adapter;
         sleep(1000)
