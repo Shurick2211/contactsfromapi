@@ -47,6 +47,7 @@ class EditActivity : AppCompatActivity(),Requestable {
             errMess = getString(R.string.error_add)
         }
         binding.errorText.text = errMess
+        errMess = null
     }
 
     override fun getRequest(request: String) {
