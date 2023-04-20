@@ -33,7 +33,8 @@ class MainActivity : AppCompatActivity(), MyItemRecyclerViewAdapter.Clickable {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         listInit();
-        startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+        { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val intent = result.data
                 var person = intent?.getSerializableExtra("new_person") as Person
