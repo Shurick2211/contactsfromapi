@@ -1,9 +1,12 @@
 package com.nimko.contacts_from_api
 
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -40,6 +43,9 @@ class MyItemRecyclerViewAdapter(
         holder.itemView.setOnClickListener {
             click.onClick(item)
         }
+        holder.call.setOnClickListener {
+           click.onClickCall(item)
+        }
     }
 
     fun addNewPerson(person:Person){
@@ -57,6 +63,7 @@ class MyItemRecyclerViewAdapter(
     inner class ViewHolder(binding: FragmentItemBinding) : RecyclerView.ViewHolder(binding.root) {
         val fN: TextView = binding.firstName
         val lN: TextView = binding.lastName
+        val call = binding.callButton
 
         override fun toString(): String {
             return super.toString() + " '${fN.text} ${lN.text}'"
@@ -65,6 +72,7 @@ class MyItemRecyclerViewAdapter(
 
     interface Clickable{
         fun onClick(item: Person)
+        fun onClickCall(item: Person)
     }
 
     override fun getRequest(request: String) {

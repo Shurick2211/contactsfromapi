@@ -2,6 +2,7 @@ package com.nimko.contacts_from_api
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +10,7 @@ import android.view.View
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
@@ -56,6 +58,12 @@ class MainActivity : AppCompatActivity(), MyItemRecyclerViewAdapter.Clickable {
         val intent = Intent(this, ContentActivity::class.java)
         intent.putExtra("person",item)
         startActivity(intent)
+    }
+
+    override fun onClickCall(item: Person) {
+        val callIntent = Intent(Intent.ACTION_CALL)
+        callIntent.data = Uri.parse("tel:${item.phoneNumber}")
+        startActivity(callIntent)
     }
 
     fun onClickAdd(view:View){
