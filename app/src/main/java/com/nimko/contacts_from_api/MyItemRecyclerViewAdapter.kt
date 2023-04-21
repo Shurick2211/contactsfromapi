@@ -1,12 +1,8 @@
 package com.nimko.contacts_from_api
 
-import android.content.Intent
-import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -14,10 +10,6 @@ import com.nimko.contacts_from_api.databinding.FragmentItemBinding
 import com.nimko.contacts_from_api.model.Person
 
 
-/**
- * [RecyclerView.Adapter] that can display a [PlaceholderItem].
- * TODO: Replace the implementation with code for your data type.
- */
 class MyItemRecyclerViewAdapter(
     val click:Clickable
 ) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>(),Requestable {
@@ -46,6 +38,9 @@ class MyItemRecyclerViewAdapter(
         holder.call.setOnClickListener {
            click.onClickCall(item)
         }
+        holder.email.setOnClickListener {
+           click.onClickEmail(item)
+        }
     }
 
     fun addNewPerson(person:Person){
@@ -61,9 +56,10 @@ class MyItemRecyclerViewAdapter(
     override fun getItemCount(): Int = values.size
 
     inner class ViewHolder(binding: FragmentItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        val fN: TextView = binding.firstName
-        val lN: TextView = binding.lastName
+        val fN = binding.firstName
+        val lN = binding.lastName
         val call = binding.callButton
+        val email = binding.emailButton
 
         override fun toString(): String {
             return super.toString() + " '${fN.text} ${lN.text}'"
@@ -73,6 +69,7 @@ class MyItemRecyclerViewAdapter(
     interface Clickable{
         fun onClick(item: Person)
         fun onClickCall(item: Person)
+        fun onClickEmail(item: Person)
     }
 
     override fun getRequest(request: String) {

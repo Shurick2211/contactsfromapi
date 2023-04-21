@@ -66,6 +66,16 @@ class MainActivity : AppCompatActivity(), MyItemRecyclerViewAdapter.Clickable {
         startActivity(callIntent)
     }
 
+    override fun onClickEmail(item: Person) {
+        val intentEmail = Intent(Intent.ACTION_SENDTO).apply {
+            type = "text/plain"
+            data = Uri.parse("mailto:${item.email}")
+            putExtra(Intent.EXTRA_SUBJECT, "Send email!")
+            putExtra(Intent.EXTRA_TEXT, "Hi, ${item.firstName} ${item.lastName}! \n")
+        }
+        startActivity(intentEmail)
+    }
+
     fun onClickAdd(view:View){
         startForResult?.launch(Intent(this, EditActivity::class.java))
     }
