@@ -15,13 +15,17 @@ class ContentActivity : AppCompatActivity() {
         binding = ActivityContentBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        addPerson()
+
+    }
+
+    private fun addPerson(){
         val intent = getIntent()
         val person = intent.getSerializableExtra("person") as Person?
         binding.firstName.text = person?.firstName
         binding.lastName.text = person?.lastName
         binding.email.text = person?.email
         binding.phoneNumber.text = person?.phoneNumber
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

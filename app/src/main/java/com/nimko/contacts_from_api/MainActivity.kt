@@ -1,23 +1,19 @@
 package com.nimko.contacts_from_api
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nimko.contacts_from_api.databinding.ActivityMainBinding
 import com.nimko.contacts_from_api.model.Person
-import okhttp3.internal.wait
 import java.lang.Thread.sleep
 
 class MainActivity : AppCompatActivity(), MyItemRecyclerViewAdapter.Clickable {
@@ -39,7 +35,7 @@ class MainActivity : AppCompatActivity(), MyItemRecyclerViewAdapter.Clickable {
         { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val intent = result.data
-                var person = intent?.getSerializableExtra("new_person") as Person
+                val person = intent?.getSerializableExtra("new_person") as Person
                 Log.d("My log", person.toString())
                 adapter.addNewPerson(person)
             }
@@ -66,6 +62,7 @@ class MainActivity : AppCompatActivity(), MyItemRecyclerViewAdapter.Clickable {
         startActivity(callIntent)
     }
 
+    @SuppressLint("IntentReset")
     override fun onClickEmail(item: Person) {
         val intentEmail = Intent(Intent.ACTION_SENDTO).apply {
             type = "text/plain"

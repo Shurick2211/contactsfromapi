@@ -1,21 +1,12 @@
 package com.nimko.contacts_from_api
 
 import android.util.Log
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
 import com.nimko.contacts_from_api.model.Person
-import kotlinx.coroutines.joinAll
-import okhttp3.Call
-import okhttp3.Response
-import okhttp3.Callback
+import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
-import java.lang.reflect.Type
 
 class ApiClient {
     private val url = "http://contacts-book.eba-skm39mww.eu-central-1.elasticbeanstalk.com/contacts"
