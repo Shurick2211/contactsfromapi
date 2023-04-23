@@ -49,6 +49,7 @@ class MyItemRecyclerViewAdapter(
     }
 
     fun refresh(){
+        values.sortBy { it.firstName }
         this.notifyDataSetChanged()
     }
 

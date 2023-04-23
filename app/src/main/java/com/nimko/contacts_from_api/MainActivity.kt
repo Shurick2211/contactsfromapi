@@ -6,7 +6,9 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import android.view.View
+import android.widget.SearchView
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -41,6 +43,35 @@ class MainActivity : AppCompatActivity(), MyItemRecyclerViewAdapter.Clickable {
             }
         }
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu,menu)
+        val searchItem = menu?.findItem(R.id.app_bar_search)
+        val searchView = searchItem?.actionView as SearchView
+        val persons:MutableList<Person>  = adapter.values
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+
+            override fun onQueryTextSubmit(ch: String?): Boolean {
+
+
+                return false
+            }
+
+            override fun onQueryTextChange(ch: String?): Boolean {
+                adapter.values = if (!ch.isNullOrBlank()) {
+                    persons.filter { it.firstName.lowercase().contains(ch.lowercase())
+                            || it.lastName.lowercase().contains(ch.lowercase())}
+                            as MutableList<Person>
+                }else{persons}
+                adapter.refresh()
+                return false
+            }
+
+        })
+        return true
+    }
+
+
 
     private fun listInit() {
         apiClient.getAllContacts(adapter)
