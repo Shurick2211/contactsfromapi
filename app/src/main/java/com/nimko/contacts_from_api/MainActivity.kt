@@ -50,23 +50,17 @@ class MainActivity : AppCompatActivity(), MyItemRecyclerViewAdapter.Clickable {
         val searchView = searchItem?.actionView as SearchView
         val persons:MutableList<Person>  = adapter.values
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-
             override fun onQueryTextSubmit(ch: String?): Boolean {
-
-
                 return false
             }
-
             override fun onQueryTextChange(ch: String?): Boolean {
                 adapter.values = if (!ch.isNullOrBlank()) {
-                    persons.filter { it.firstName.lowercase().contains(ch.lowercase())
-                            || it.lastName.lowercase().contains(ch.lowercase())}
-                            as MutableList<Person>
+                    persons.filter { "${it.firstName.lowercase()} ${it.lastName.lowercase()}"
+                        .contains(ch.lowercase())} as MutableList<Person>
                 }else{persons}
                 adapter.refresh()
                 return false
             }
-
         })
         return true
     }
