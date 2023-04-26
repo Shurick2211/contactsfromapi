@@ -8,4 +8,5 @@
     <string name="error_add">Заповни усі поля!</string>
     <string name="wait">Почекай...</string>
     <string name="add_contact">Додати контакт!</string>
+    <string name="edit_activity">Редагувати контакт</string>
 </resources>

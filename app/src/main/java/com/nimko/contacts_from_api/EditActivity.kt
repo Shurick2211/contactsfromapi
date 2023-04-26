@@ -24,6 +24,7 @@ class EditActivity : AppCompatActivity(),Requestable {
         binding = ActivityEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setTitle(R.string.add_contact)
         isEdit = false
         addPerson()
     }
@@ -38,7 +39,7 @@ class EditActivity : AppCompatActivity(),Requestable {
             && binding.email.text.isNotBlank()
             && binding.phoneNumber.text.isNotBlank()) {
             person = getPersonFromForm()
-            if(isEdit) {
+            if(!isEdit) {
                 apiClient.createContact(person!!, this)
             } else {
                 apiClient.editContact(person!!,this)
@@ -58,8 +59,13 @@ class EditActivity : AppCompatActivity(),Requestable {
     }
 
     private fun getPersonFromForm(): Person{
+        val id = if(isEdit){
+            person!!.id
+        }else{
+            null
+        }
         return Person(
-            null,
+            id,
             binding.firstName.text.toString(),
             binding.lastName.text.toString(),
             binding.phoneNumber.text.toString(),
@@ -81,6 +87,7 @@ class EditActivity : AppCompatActivity(),Requestable {
         val intent = getIntent()
         person = intent.getSerializableExtra("personForEdit") as Person?
         person?.let  {
+            supportActionBar?.setTitle(R.string.edit_activity)
             binding.firstName.setText(it.firstName )
             binding.lastName.setText(it.lastName)
             binding.email.setText(it.email )

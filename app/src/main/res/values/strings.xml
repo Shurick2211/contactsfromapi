@@ -7,4 +7,5 @@
     <string name="error_add">Fill in all the fields!</string>
     <string name="wait">Wait…</string>
     <string name="add_contact">Add contact!</string>
+    <string name="edit_activity">Edit contact</string>
 </resources>
