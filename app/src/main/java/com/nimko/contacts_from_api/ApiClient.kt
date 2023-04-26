@@ -16,6 +16,10 @@ class ApiClient {
         return post(person, apiRequest)
     }
 
+    fun editContact(person:Person, apiRequest: Requestable):String{
+        return put(person, apiRequest)
+    }
+
     fun getAllContacts(apiRequest: Requestable):String{
         return get(url, apiRequest)
     }

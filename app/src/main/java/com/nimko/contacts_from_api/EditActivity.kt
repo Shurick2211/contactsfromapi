@@ -18,11 +18,13 @@ class EditActivity : AppCompatActivity(),Requestable {
     private val apiClient:ApiClient = ApiClient()
     private var person:Person? = null
     private var errMess:String? = null
+    private var isEdit = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        isEdit = false
         addPerson()
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -36,7 +38,11 @@ class EditActivity : AppCompatActivity(),Requestable {
             && binding.email.text.isNotBlank()
             && binding.phoneNumber.text.isNotBlank()) {
             person = getPersonFromForm()
-            apiClient.createContact(person!!, this)
+            if(isEdit) {
+                apiClient.createContact(person!!, this)
+            } else {
+                apiClient.editContact(person!!,this)
+            }
             sleep(1000)
             if (errMess.isNullOrBlank()) {
                 val intent = Intent()
@@ -74,9 +80,12 @@ class EditActivity : AppCompatActivity(),Requestable {
     private fun addPerson(){
         val intent = getIntent()
         person = intent.getSerializableExtra("personForEdit") as Person?
-            binding.firstName.setText(person?.firstName ?: "")
-            binding.lastName.setText(person?.lastName ?: "")
-            binding.email.setText(person?.email ?: "")
-            binding.phoneNumber.setText(person?.phoneNumber ?: "")
+        person?.let  {
+            binding.firstName.setText(it.firstName )
+            binding.lastName.setText(it.lastName)
+            binding.email.setText(it.email )
+            binding.phoneNumber.setText(it.phoneNumber )
+            isEdit = true
         }
+    }
 }
