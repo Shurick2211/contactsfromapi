@@ -3,6 +3,7 @@ package com.nimko.contacts_from_api
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -22,6 +23,7 @@ class EditActivity : AppCompatActivity(),Requestable {
         binding = ActivityEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        addPerson()
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if(item.itemId == android.R.id.home) finish()
@@ -33,14 +35,7 @@ class EditActivity : AppCompatActivity(),Requestable {
             && binding.lastName.text.isNotBlank()
             && binding.email.text.isNotBlank()
             && binding.phoneNumber.text.isNotBlank()) {
-            person = Person(
-                binding.firstName.text.toString(),
-                binding.lastName.text.toString(),
-                binding.phoneNumber.text.toString(),
-                binding.email.text.toString(),
-                getString(R.string.app_name),
-                null
-            )
+            person = getPersonFromForm()
             apiClient.createContact(person!!, this)
             sleep(1000)
             if (errMess.isNullOrBlank()) {
@@ -56,13 +51,32 @@ class EditActivity : AppCompatActivity(),Requestable {
         errMess = null
     }
 
-    override fun getRequest(request: String) {
-    try {
-        person = Gson().fromJson(request,Person::class.java)
-        Log.d("Create on API", person.toString())
-    } catch (e: Exception){
-        errMess = request
+    private fun getPersonFromForm(): Person{
+        return Person(
+            null,
+            binding.firstName.text.toString(),
+            binding.lastName.text.toString(),
+            binding.phoneNumber.text.toString(),
+            binding.email.text.toString(),
+            getString(R.string.app_name),
+            null
+        )
     }
 
+    override fun getRequest(request: String) {
+        try {
+            person = Gson().fromJson(request,Person::class.java)
+            Log.d("Create on API", person.toString())
+        } catch (e: Exception){
+            errMess = request
+        }
     }
+    private fun addPerson(){
+        val intent = getIntent()
+        person = intent.getSerializableExtra("personForEdit") as Person?
+            binding.firstName.setText(person?.firstName ?: "")
+            binding.lastName.setText(person?.lastName ?: "")
+            binding.email.setText(person?.email ?: "")
+            binding.phoneNumber.setText(person?.phoneNumber ?: "")
+        }
 }

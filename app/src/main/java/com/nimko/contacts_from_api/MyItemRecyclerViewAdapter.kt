@@ -74,6 +74,7 @@ class MyItemRecyclerViewAdapter(
     }
 
     override fun getRequest(request: String) {
+        values.clear()
         val sType = object : TypeToken<List<Person>>() { }.type
         val persons = Gson().fromJson<List<Person>>(request, sType)
         Log.d("LIST", persons.toString())

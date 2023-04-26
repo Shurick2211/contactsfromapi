@@ -44,6 +44,11 @@ class MainActivity : AppCompatActivity(), MyItemRecyclerViewAdapter.Clickable {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        listInit()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu,menu)
         val searchItem = menu?.findItem(R.id.app_bar_search)

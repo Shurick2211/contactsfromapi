@@ -1,27 +1,29 @@
 package com.nimko.contacts_from_api
 
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
 import com.nimko.contacts_from_api.databinding.ActivityContentBinding
 import com.nimko.contacts_from_api.model.Person
 
-class ContentActivity : AppCompatActivity() {
+class ContentActivity : AppCompatActivity(), Requestable {
     private lateinit var binding : ActivityContentBinding
-
+    var person:Person? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityContentBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         addPerson()
-
     }
 
     private fun addPerson(){
         val intent = getIntent()
-        val person = intent.getSerializableExtra("person") as Person?
+        person = intent.getSerializableExtra("person") as Person?
         binding.firstName.text = person?.firstName
         binding.lastName.text = person?.lastName
         binding.email.text = person?.email
@@ -29,7 +31,32 @@ class ContentActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == android.R.id.home) finish()
+        when(item.itemId){
+            android.R.id.home -> finish()
+            R.id.edit_item -> edit()
+            R.id.delete_item -> delete()
+        }
+
         return true
+    }
+
+    private fun delete() {
+        ApiClient().deleteContact(person?.id!!,this)
+    }
+
+    private fun edit() {
+        val intent = Intent(this, EditActivity::class.java)
+        intent.putExtra("personForEdit",person)
+        startActivity(intent)
+
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.content_menu, menu)
+        return true
+    }
+
+    override fun getRequest(request: String) {
+        finish()
     }
 }

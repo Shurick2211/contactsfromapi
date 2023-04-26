@@ -25,6 +25,18 @@ class ApiClient {
         return get("$url/$email", apiRequest)
     }
 
+    fun deleteContact(id:Long, apiRequest: Requestable):String{
+        return delete(id, apiRequest)
+    }
+
+    private fun delete(id: Long, apiRequest: Requestable): String {
+        val request =  Request.Builder()
+            .url("$url/$id")
+            .delete()
+            .build()
+        return execHttpAsync(request, apiRequest)
+    }
+
     fun getContactByPhone(phone:String, apiRequest: Requestable):String{
 
         return get("$url/phones?phone=$phone", apiRequest)
@@ -34,6 +46,15 @@ class ApiClient {
         val request =  Request.Builder()
             .url(url)
             .build();
+        return execHttpAsync(request, apiRequest)
+    }
+
+    private fun put(person:Person, apiRequest: Requestable):String{
+        val jsonRequest = GsonBuilder().create().toJson(person,Person::class.java)
+        Log.d("Request Json", jsonRequest)
+        val JSON = "application/json; charset=utf-8".toMediaType()
+        val body: RequestBody = jsonRequest.toRequestBody(JSON)
+        val request = Request.Builder().url(url).put(body).build()
         return execHttpAsync(request, apiRequest)
     }
 
@@ -61,7 +82,7 @@ class ApiClient {
                         Log.w("Error http",
                             " ${response.code} ${result}")
                     } else {
-                        result = response.body!!.string()
+                        result = response.body?.string() ?: "$response.code"
                         Log.d("Http OK", result)
                     }
                     apiRequest.getRequest(result)
