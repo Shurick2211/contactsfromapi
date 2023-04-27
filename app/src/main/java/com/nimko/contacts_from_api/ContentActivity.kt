@@ -1,29 +1,44 @@
 package com.nimko.contacts_from_api
 
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import com.nimko.contacts_from_api.databinding.ActivityContentBinding
 import com.nimko.contacts_from_api.model.Person
 
 class ContentActivity : AppCompatActivity(), Requestable {
     private lateinit var binding : ActivityContentBinding
     var person:Person? = null
+    private var startForResult: ActivityResultLauncher<Intent>? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityContentBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setTitle(R.string.content_activity)
+        val intent = getIntent()
+        person = intent.getSerializableExtra("person") as Person?
         addPerson()
+        startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+        { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val intent = result.data
+                person = intent?.getSerializableExtra("new_person") as Person
+                Log.d("My log content", person.toString())
+                addPerson()
+            }
+        }
     }
 
     private fun addPerson(){
-        val intent = getIntent()
-        person = intent.getSerializableExtra("person") as Person?
         binding.firstName.text = person?.firstName
         binding.lastName.text = person?.lastName
         binding.email.text = person?.email
@@ -46,9 +61,8 @@ class ContentActivity : AppCompatActivity(), Requestable {
 
     private fun edit() {
         val intent = Intent(this, EditActivity::class.java)
-        intent.putExtra("personForEdit",person)
-        startActivity(intent)
-
+        intent.putExtra("personForEdit", person)
+        startForResult?.launch(intent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

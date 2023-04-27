@@ -6,6 +6,7 @@
     <string name="email">Email:</string>
     <string name="error_add">Fill in all the fields!</string>
     <string name="wait">Wait…</string>
-    <string name="add_contact">Add contact!</string>
+    <string name="add_contact">Add contact</string>
     <string name="edit_activity">Edit contact</string>
+    <string name="content_activity">Contact</string>
 </resources>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">contacts-from-api</string>
+    <string name="first_name">Имя:</string>
+    <string name="last_name">Фамилия:</string>
+    <string name="phone_number">Номер телефона:</string>
+    <string name="email">Почта:</string>
+    <string name="error_add">Заполни все поля!</string>
+    <string name="wait">Подожди!</string>
+    <string name="add_contact">Добавить контакт</string>
+    <string name="edit_activity">Изменить контакт</string>
+    <string name="content_activity">Контакт</string>
+</resources>
