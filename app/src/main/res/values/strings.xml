@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">contacts-from-api</string>
+    <string name="app_name">Contacts from API</string>
     <string name="first_name">First name:</string>
     <string name="last_name">Last name:</string>
     <string name="phone_number">Phone number:</string>

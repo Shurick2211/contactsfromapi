@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">contacts-from-api</string>
+    <string name="app_name">Контакти с API</string>
     <string name="first_name">Имя:</string>
     <string name="last_name">Фамилия:</string>
     <string name="phone_number">Номер телефона:</string>
