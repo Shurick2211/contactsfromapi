@@ -53,12 +53,12 @@ class ContentActivity : AppCompatActivity(), Requestable {
             R.id.edit_item -> edit()
             R.id.delete_item -> delete()
         }
-
         return true
     }
 
     private fun delete() {
         ApiClient().deleteContact(person?.id!!,this)
+        allContacts.remove(person)
     }
 
     private fun edit() {

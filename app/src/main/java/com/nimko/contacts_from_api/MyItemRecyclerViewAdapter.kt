@@ -31,19 +31,25 @@ class MyItemRecyclerViewAdapter(
         holder.itemView.setOnClickListener {
             click.onClick(item)
         }
+
         holder.call.setOnClickListener {
            click.onClickCall(item)
         }
         holder.email.setOnClickListener {
            click.onClickEmail(item)
         }
+
     }
 
     fun addNewPerson(person:Person){
         values.add(person)
         refresh()
     }
-
+    fun addAllPersons(persons:Collection<Person>){
+        values.clear()
+        values.addAll(persons)
+        refresh()
+    }
 
     @SuppressLint("NotifyDataSetChanged")
     fun refresh(){

@@ -18,12 +18,12 @@ import com.nimko.contacts_from_api.databinding.ActivityMainBinding
 import com.nimko.contacts_from_api.model.Person
 import java.lang.Thread.sleep
 
+lateinit var allContacts:MutableList<Person>
 class MainActivity : AppCompatActivity(), Requestable {
 
     private lateinit var binding: ActivityMainBinding
     private val adapter: MyItemRecyclerViewAdapter = MyItemRecyclerViewAdapter( )
     private var startForResult:ActivityResultLauncher<Intent>? = null
-
     private val apiClient:ApiClient = ApiClient()
 
 
@@ -45,7 +45,10 @@ class MainActivity : AppCompatActivity(), Requestable {
 
     override fun onResume() {
         super.onResume()
-        makeRequestApi()
+        if(!adapter.values.containsAll(allContacts)
+            || !allContacts.containsAll(adapter.values)) {
+            adapter.addAllPersons(allContacts)
+        }
     }
 
 
@@ -53,24 +56,22 @@ class MainActivity : AppCompatActivity(), Requestable {
         menuInflater.inflate(R.menu.menu,menu)
         val searchItem = menu?.findItem(R.id.app_bar_search)
         val searchView = searchItem?.actionView as SearchView
-        val persons:MutableList<Person>  = adapter.values
+
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(ch: String?): Boolean {
                 return false
             }
             override fun onQueryTextChange(ch: String?): Boolean {
                 adapter.values = if (!ch.isNullOrBlank()) {
-                    persons.filter { "${it.firstName.lowercase()} ${it.lastName.lowercase()}"
+                    allContacts.filter { "${it.firstName.lowercase()} ${it.lastName.lowercase()}"
                         .contains(ch.lowercase())} as MutableList<Person>
-                }else{persons}
+                }else{allContacts}
                 adapter.refresh()
                 return false
             }
         })
         return true
     }
-
-
 
     private fun listInit() {
         makeRequestApi()
@@ -81,10 +82,8 @@ class MainActivity : AppCompatActivity(), Requestable {
     private fun makeRequestApi(){
         apiClient.getAllContacts(this)
         sleep(1000)
-        adapter.refresh()
+        adapter.addAllPersons(allContacts)
     }
-
-
 
     fun onClickAdd(view:View){
         startForResult?.launch(Intent(this, EditActivity::class.java))
@@ -92,9 +91,7 @@ class MainActivity : AppCompatActivity(), Requestable {
 
     override fun getRequest(request: String) {
         val sType = object : TypeToken<List<Person>>() { }.type
-        val persons = Gson().fromJson<List<Person>>(request, sType)
-        Log.d("LIST", persons.toString())
-        adapter.values.clear()
-        adapter.values.addAll(persons)
+        allContacts = Gson().fromJson<List<Person>>(request, sType) as MutableList<Person>
     }
 }
+

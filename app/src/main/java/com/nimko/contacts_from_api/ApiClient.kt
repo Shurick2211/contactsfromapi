@@ -25,7 +25,6 @@ class ApiClient {
     }
 
     fun getContactByEmail(email:String, apiRequest: Requestable):String{
-
         return get("$url/$email", apiRequest)
     }
 
@@ -42,7 +41,6 @@ class ApiClient {
     }
 
     fun getContactByPhone(phone:String, apiRequest: Requestable):String{
-
         return get("$url/phones?phone=$phone", apiRequest)
     }
 
@@ -93,7 +91,6 @@ class ApiClient {
                 }
             }
         })
-
         return result
     }
 
