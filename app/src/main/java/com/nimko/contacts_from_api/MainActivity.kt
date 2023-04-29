@@ -18,11 +18,12 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.nimko.contacts_from_api.databinding.ActivityMainBinding
 import com.nimko.contacts_from_api.model.Person
+import java.lang.Thread.sleep
 
-class MainActivity : AppCompatActivity(), MyItemRecyclerViewAdapter.Clickable, Requestable {
+class MainActivity : AppCompatActivity(), Requestable {
 
     private lateinit var binding: ActivityMainBinding
-    private val adapter: MyItemRecyclerViewAdapter = MyItemRecyclerViewAdapter( this)
+    private val adapter: MyItemRecyclerViewAdapter = MyItemRecyclerViewAdapter( )
     private var startForResult:ActivityResultLauncher<Intent>? = null
 
     private val apiClient:ApiClient = ApiClient()
@@ -77,31 +78,33 @@ class MainActivity : AppCompatActivity(), MyItemRecyclerViewAdapter.Clickable, R
     private fun listInit() {
         apiClient.getAllContacts(this)
         binding.list.layoutManager = LinearLayoutManager(this)
-        binding.list.adapter = adapter;
+        binding.list.adapter = adapter
+        sleep(1000)
+        adapter.refresh()
     }
 
-    override fun onClick(item: Person) {
-        val intent = Intent(this, ContentActivity::class.java)
-        intent.putExtra("person",item)
-        startActivity(intent)
-    }
-
-    override fun onClickCall(item: Person) {
-        val callIntent = Intent(Intent.ACTION_CALL)
-        callIntent.data = Uri.parse("tel:${item.phoneNumber}")
-        startActivity(callIntent)
-    }
-
-    @SuppressLint("IntentReset")
-    override fun onClickEmail(item: Person) {
-        val intentEmail = Intent(Intent.ACTION_SENDTO).apply {
-            type = "text/plain"
-            data = Uri.parse("mailto:${item.email}")
-            putExtra(Intent.EXTRA_SUBJECT, "Send email!")
-            putExtra(Intent.EXTRA_TEXT, "Hi, ${item.firstName} ${item.lastName}! \n")
-        }
-        startActivity(intentEmail)
-    }
+//    override fun onClick(item: Person) {
+//        val intent = Intent(this, ContentActivity::class.java)
+//        intent.putExtra("person",item)
+//        startActivity(intent)
+//    }
+//
+//    override fun onClickCall(item: Person) {
+//        val callIntent = Intent(Intent.ACTION_CALL)
+//        callIntent.data = Uri.parse("tel:${item.phoneNumber}")
+//        startActivity(callIntent)
+//    }
+//
+//    @SuppressLint("IntentReset")
+//    override fun onClickEmail(item: Person) {
+//        val intentEmail = Intent(Intent.ACTION_SENDTO).apply {
+//            type = "text/plain"
+//            data = Uri.parse("mailto:${item.email}")
+//            putExtra(Intent.EXTRA_SUBJECT, "Send email!")
+//            putExtra(Intent.EXTRA_TEXT, "Hi, ${item.firstName} ${item.lastName}! \n")
+//        }
+//        startActivity(intentEmail)
+//    }
 
     fun onClickAdd(view:View){
         startForResult?.launch(Intent(this, EditActivity::class.java))
