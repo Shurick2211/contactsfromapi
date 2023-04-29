@@ -1,18 +1,16 @@
 package com.nimko.contacts_from_api
 
-import android.util.Log
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.nimko.contacts_from_api.databinding.FragmentItemBinding
 import com.nimko.contacts_from_api.model.Person
 
 
 class MyItemRecyclerViewAdapter(
     val click:Clickable
-) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>(),Requestable {
+) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>() {
 
    var  values: MutableList<Person> = ArrayList()
 
@@ -48,6 +46,7 @@ class MyItemRecyclerViewAdapter(
         refresh()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun refresh(){
         values.sortBy { it.firstName }
         this.notifyDataSetChanged()
@@ -61,10 +60,6 @@ class MyItemRecyclerViewAdapter(
         val lN = binding.lastName
         val call = binding.callButton
         val email = binding.emailButton
-
-        override fun toString(): String {
-            return super.toString() + " '${fN.text} ${lN.text}'"
-        }
     }
 
     interface Clickable{
@@ -73,11 +68,5 @@ class MyItemRecyclerViewAdapter(
         fun onClickEmail(item: Person)
     }
 
-    override fun getRequest(request: String) {
-        values.clear()
-        val sType = object : TypeToken<List<Person>>() { }.type
-        val persons = Gson().fromJson<List<Person>>(request, sType)
-        Log.d("LIST", persons.toString())
-        values.addAll(persons)
-    }
+
 }

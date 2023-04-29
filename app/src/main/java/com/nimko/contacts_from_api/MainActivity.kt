@@ -14,11 +14,12 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.nimko.contacts_from_api.databinding.ActivityMainBinding
 import com.nimko.contacts_from_api.model.Person
-import java.lang.Thread.sleep
 
-class MainActivity : AppCompatActivity(), MyItemRecyclerViewAdapter.Clickable {
+class MainActivity : AppCompatActivity(), MyItemRecyclerViewAdapter.Clickable, Requestable {
 
     private lateinit var binding: ActivityMainBinding
     private val adapter: MyItemRecyclerViewAdapter = MyItemRecyclerViewAdapter( this)
@@ -46,8 +47,9 @@ class MainActivity : AppCompatActivity(), MyItemRecyclerViewAdapter.Clickable {
 
     override fun onResume() {
         super.onResume()
-        listInit()
+        apiClient.getAllContacts(this)
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu,menu)
@@ -73,11 +75,9 @@ class MainActivity : AppCompatActivity(), MyItemRecyclerViewAdapter.Clickable {
 
 
     private fun listInit() {
-        apiClient.getAllContacts(adapter)
+        apiClient.getAllContacts(this)
         binding.list.layoutManager = LinearLayoutManager(this)
         binding.list.adapter = adapter;
-        sleep(1000)
-        adapter.refresh()
     }
 
     override fun onClick(item: Person) {
@@ -105,5 +105,13 @@ class MainActivity : AppCompatActivity(), MyItemRecyclerViewAdapter.Clickable {
 
     fun onClickAdd(view:View){
         startForResult?.launch(Intent(this, EditActivity::class.java))
+    }
+
+    override fun getRequest(request: String) {
+        val sType = object : TypeToken<List<Person>>() { }.type
+        val persons = Gson().fromJson<List<Person>>(request, sType)
+        Log.d("LIST", persons.toString())
+        adapter.values.clear()
+        adapter.values.addAll(persons)
     }
 }
