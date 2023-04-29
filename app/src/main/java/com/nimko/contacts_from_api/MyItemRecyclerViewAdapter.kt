@@ -1,7 +1,6 @@
 package com.nimko.contacts_from_api
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -12,11 +11,10 @@ import com.nimko.contacts_from_api.model.Person
 class MyItemRecyclerViewAdapter(
 ) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>() {
     var  values: MutableList<Person> = ArrayList()
-    lateinit var context:Context
+
     lateinit var click:Clickable
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        context = parent.context
-        click = AdapterClickListener(context)
+        click = AdapterClickListener(parent.context)
         return ViewHolder(
             FragmentItemBinding.inflate(
                 LayoutInflater.from(parent.context),
@@ -24,7 +22,6 @@ class MyItemRecyclerViewAdapter(
                 false
             )
         )
-
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -47,11 +44,6 @@ class MyItemRecyclerViewAdapter(
         refresh()
     }
 
-    fun addAllContacts(list:Iterable<Person>){
-        values.clear()
-        values.addAll(list)
-        refresh()
-    }
 
     @SuppressLint("NotifyDataSetChanged")
     fun refresh(){

@@ -39,10 +39,12 @@ class ContentActivity : AppCompatActivity(), Requestable {
     }
 
     private fun addPerson(){
-        binding.firstName.text = person?.firstName
-        binding.lastName.text = person?.lastName
-        binding.email.text = person?.email
-        binding.phoneNumber.text = person?.phoneNumber
+        binding.apply {
+            firstName.text = person?.firstName
+            lastName.text = person?.lastName
+            email.text = person?.email
+            phoneNumber.text = person?.phoneNumber
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
