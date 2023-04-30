@@ -12,11 +12,11 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.nimko.contacts_from_api.databinding.ActivityContentBinding
-import com.nimko.contacts_from_api.model.Person
+import com.nimko.contacts_from_api.model.ItemForAdapter
 
 class ContentActivity : AppCompatActivity(), Requestable {
     private lateinit var binding : ActivityContentBinding
-    var person:Person? = null
+    var person:ItemForAdapter.Person? = null
     private var startForResult: ActivityResultLauncher<Intent>? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,13 +25,13 @@ class ContentActivity : AppCompatActivity(), Requestable {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setTitle(R.string.content_activity)
         val intent = getIntent()
-        person = intent.getSerializableExtra("person") as Person?
+        person = intent.getSerializableExtra("person") as ItemForAdapter.Person?
         addPerson()
         startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult())
         { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val intent = result.data
-                person = intent?.getSerializableExtra("new_person") as Person
+                person = intent?.getSerializableExtra("new_person") as ItemForAdapter.Person
                 Log.d("My log content", person.toString())
                 addPerson()
             }

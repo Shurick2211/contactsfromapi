@@ -2,7 +2,7 @@ package com.nimko.contacts_from_api
 
 import android.util.Log
 import com.google.gson.GsonBuilder
-import com.nimko.contacts_from_api.model.Person
+import com.nimko.contacts_from_api.model.ItemForAdapter
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -12,11 +12,11 @@ class ApiClient {
     private val url = "http://contacts-book.eba-skm39mww.eu-central-1.elasticbeanstalk.com/contacts"
     private val client: OkHttpClient = OkHttpClient()
 
-    fun createContact(person:Person, apiRequest: Requestable):String{
+    fun createContact(person: ItemForAdapter.Person, apiRequest: Requestable):String{
         return post(person, apiRequest)
     }
 
-    fun editContact(person:Person, apiRequest: Requestable):String{
+    fun editContact(person:ItemForAdapter.Person, apiRequest: Requestable):String{
         return put(person, apiRequest)
     }
 
@@ -51,8 +51,8 @@ class ApiClient {
         return execHttpAsync(request, apiRequest)
     }
 
-    private fun put(person:Person, apiRequest: Requestable):String{
-        val jsonRequest = GsonBuilder().create().toJson(person,Person::class.java)
+    private fun put(person:ItemForAdapter.Person, apiRequest: Requestable):String{
+        val jsonRequest = GsonBuilder().create().toJson(person,ItemForAdapter.Person::class.java)
         Log.d("Request Json", jsonRequest)
         val JSON = "application/json; charset=utf-8".toMediaType()
         val body: RequestBody = jsonRequest.toRequestBody(JSON)
@@ -60,8 +60,8 @@ class ApiClient {
         return execHttpAsync(request, apiRequest)
     }
 
-    private fun post(person:Person, apiRequest: Requestable):String{
-        val jsonRequest = GsonBuilder().create().toJson(person,Person::class.java)
+    private fun post(person:ItemForAdapter.Person, apiRequest: Requestable):String{
+        val jsonRequest = GsonBuilder().create().toJson(person,ItemForAdapter.Person::class.java)
         Log.d("Request Json", jsonRequest)
         val JSON = "application/json; charset=utf-8".toMediaType()
         val body: RequestBody = jsonRequest.toRequestBody(JSON)

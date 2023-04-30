@@ -9,13 +9,13 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.nimko.contacts_from_api.databinding.ActivityEditBinding
-import com.nimko.contacts_from_api.model.Person
+import com.nimko.contacts_from_api.model.ItemForAdapter
 import java.lang.Thread.sleep
 
 class EditActivity : AppCompatActivity(),Requestable {
     private lateinit var binding: ActivityEditBinding
     private val apiClient:ApiClient = ApiClient()
-    private var person:Person? = null
+    private var person:ItemForAdapter.Person? = null
     private var errMess:String? = null
     private var isEdit = false
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,13 +60,13 @@ class EditActivity : AppCompatActivity(),Requestable {
         errMess = null
     }
 
-    private fun getPersonFromForm(): Person{
+    private fun getPersonFromForm(): ItemForAdapter.Person{
         val id = if(isEdit){
             person!!.id
         }else{
             null
         }
-        return Person(
+        return ItemForAdapter.Person(
             id,
             binding.firstName.text.toString(),
             binding.lastName.text.toString(),
@@ -79,7 +79,7 @@ class EditActivity : AppCompatActivity(),Requestable {
 
     override fun getRequest(request: String) {
         try {
-            person = Gson().fromJson(request,Person::class.java)
+            person = Gson().fromJson(request,ItemForAdapter.Person::class.java)
             Log.d("Create on API", person.toString())
         } catch (e: Exception){
             errMess = request
@@ -87,7 +87,7 @@ class EditActivity : AppCompatActivity(),Requestable {
     }
     private fun addPerson(){
         val intent = getIntent()
-        person = intent.getSerializableExtra("personForEdit") as Person?
+        person = intent.getSerializableExtra("personForEdit") as ItemForAdapter.Person?
         person?.let  {
             supportActionBar?.setTitle(R.string.edit_activity)
             binding.firstName.setText(it.firstName )

@@ -5,16 +5,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.nimko.contacts_from_api.databinding.FragmentItemBinding
-import com.nimko.contacts_from_api.model.Person
+import com.nimko.contacts_from_api.model.ItemForAdapter
 
 
-class MyItemRecyclerViewAdapter(
-) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>() {
-    var  values: MutableList<Person> = ArrayList()
+class MyItemRecyclerViewAdapter: RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>() {
+    var  values: MutableList<ItemForAdapter.Person> = ArrayList()
 
-    lateinit var click:Clickable
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        click = AdapterClickListener(parent.context)
         return ViewHolder(
             FragmentItemBinding.inflate(
                 LayoutInflater.from(parent.context),
@@ -25,27 +23,14 @@ class MyItemRecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = values[position]
-        holder.lN.text = item.lastName
-        holder.fN.text = item.firstName
-        holder.itemView.setOnClickListener {
-            click.onClick(item)
-        }
-
-        holder.call.setOnClickListener {
-           click.onClickCall(item)
-        }
-        holder.email.setOnClickListener {
-           click.onClickEmail(item)
-        }
-
+        holder.bind(values[position])
     }
 
-    fun addNewPerson(person:Person){
+    fun addNewPerson(person:ItemForAdapter.Person){
         values.add(person)
         refresh()
     }
-    fun addAllPersons(persons:Collection<Person>){
+    fun addAllPersons(persons:Collection<ItemForAdapter.Person>){
         values.clear()
         values.addAll(persons)
         refresh()
@@ -60,17 +45,23 @@ class MyItemRecyclerViewAdapter(
 
     override fun getItemCount(): Int = values.size
 
-    inner class ViewHolder(binding: FragmentItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        val fN = binding.firstName
-        val lN = binding.lastName
-        val call = binding.callButton
-        val email = binding.emailButton
+    inner class ViewHolder(val binding: FragmentItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: ItemForAdapter.Person){
+            val click = AdapterClickListener(this.itemView.context)
+            binding.apply {
+                firstName.text = item.firstName
+                lastName.text = item.lastName
+                itemView.setOnClickListener { click.onClick(item) }
+                binding.callButton.setOnClickListener{ click.onClickCall(item) }
+                binding.emailButton.setOnClickListener{ click.onClickEmail(item)}
+            }
+        }
     }
 
     interface Clickable{
-        fun onClick(item: Person)
-        fun onClickCall(item: Person)
-        fun onClickEmail(item: Person)
+        fun onClick(item: ItemForAdapter.Person)
+        fun onClickCall(item: ItemForAdapter.Person)
+        fun onClickEmail(item: ItemForAdapter.Person)
     }
 
 

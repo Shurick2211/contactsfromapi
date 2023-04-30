@@ -15,10 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.nimko.contacts_from_api.databinding.ActivityMainBinding
-import com.nimko.contacts_from_api.model.Person
+import com.nimko.contacts_from_api.model.ItemForAdapter
 import java.lang.Thread.sleep
 
-lateinit var allContacts:MutableList<Person>
+lateinit var allContacts:MutableList<ItemForAdapter.Person>
 class MainActivity : AppCompatActivity(), Requestable {
 
     private lateinit var binding: ActivityMainBinding
@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity(), Requestable {
         { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val intent = result.data
-                val person = intent?.getSerializableExtra("new_person") as Person
+                val person = intent?.getSerializableExtra("new_person") as ItemForAdapter.Person
                 Log.d("My log", person.toString())
                 adapter.addNewPerson(person)
             }
@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity(), Requestable {
             override fun onQueryTextChange(ch: String?): Boolean {
                 adapter.values = if (!ch.isNullOrBlank()) {
                     allContacts.filter { "${it.firstName.lowercase()} ${it.lastName.lowercase()}"
-                        .contains(ch.lowercase())} as MutableList<Person>
+                        .contains(ch.lowercase())} as MutableList<ItemForAdapter.Person>
                 }else{allContacts}
                 adapter.refresh()
                 return false
@@ -90,8 +90,8 @@ class MainActivity : AppCompatActivity(), Requestable {
     }
 
     override fun getRequest(request: String) {
-        val sType = object : TypeToken<List<Person>>() { }.type
-        allContacts = Gson().fromJson<List<Person>>(request, sType) as MutableList<Person>
+        val sType = object : TypeToken<List<ItemForAdapter.Person>>() { }.type
+        allContacts = Gson().fromJson<List<ItemForAdapter.Person>>(request, sType) as MutableList<ItemForAdapter.Person>
     }
 }
 
