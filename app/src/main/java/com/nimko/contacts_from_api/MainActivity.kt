@@ -18,7 +18,7 @@ import com.nimko.contacts_from_api.databinding.ActivityMainBinding
 import com.nimko.contacts_from_api.model.ItemForAdapter
 import java.lang.Thread.sleep
 
-lateinit var allContacts:MutableList<ItemForAdapter.Person>
+lateinit var allContacts:MutableList<Any>
 class MainActivity : AppCompatActivity(), Requestable {
 
     private lateinit var binding: ActivityMainBinding
@@ -32,13 +32,14 @@ class MainActivity : AppCompatActivity(), Requestable {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         listInit();
+        allContacts.add(0,ItemForAdapter.Header("Hello!"))
         startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult())
         { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val intent = result.data
                 val person = intent?.getSerializableExtra("new_person") as ItemForAdapter.Person
                 Log.d("My log", person.toString())
-                adapter.addNewPerson(person)
+                allContacts.add(person)
             }
         }
     }
@@ -47,7 +48,7 @@ class MainActivity : AppCompatActivity(), Requestable {
         super.onResume()
         if(!adapter.values.containsAll(allContacts)
             || !allContacts.containsAll(adapter.values)) {
-            adapter.addAllPersons(allContacts)
+            adapter.addAllPersons(allContacts as Collection<ItemForAdapter>)
         }
     }
 
@@ -63,9 +64,12 @@ class MainActivity : AppCompatActivity(), Requestable {
             }
             override fun onQueryTextChange(ch: String?): Boolean {
                 adapter.values = if (!ch.isNullOrBlank()) {
-                    allContacts.filter { "${it.firstName.lowercase()} ${it.lastName.lowercase()}"
-                        .contains(ch.lowercase())} as MutableList<ItemForAdapter.Person>
-                }else{allContacts}
+                    allContacts
+                        .filter { it is ItemForAdapter.Person }
+                        .map{it as ItemForAdapter.Person}
+                        .filter {"${it.firstName.lowercase()} ${it.lastName.lowercase()}"
+                        .contains(ch.lowercase())} as MutableList<ItemForAdapter>
+                }else{allContacts as MutableList<ItemForAdapter>}
                 adapter.refresh()
                 return false
             }
@@ -74,6 +78,7 @@ class MainActivity : AppCompatActivity(), Requestable {
     }
 
     private fun listInit() {
+
         makeRequestApi()
         binding.list.layoutManager = LinearLayoutManager(this)
         binding.list.adapter = adapter
@@ -82,7 +87,7 @@ class MainActivity : AppCompatActivity(), Requestable {
     private fun makeRequestApi(){
         apiClient.getAllContacts(this)
         sleep(1000)
-        adapter.addAllPersons(allContacts)
+        adapter.addAllPersons(allContacts as Collection<ItemForAdapter>)
     }
 
     fun onClickAdd(view:View){
@@ -91,7 +96,8 @@ class MainActivity : AppCompatActivity(), Requestable {
 
     override fun getRequest(request: String) {
         val sType = object : TypeToken<List<ItemForAdapter.Person>>() { }.type
-        allContacts = Gson().fromJson<List<ItemForAdapter.Person>>(request, sType) as MutableList<ItemForAdapter.Person>
+        allContacts = Gson().fromJson<List<ItemForAdapter.Person>>(request, sType).toMutableList()
+
     }
 }
 

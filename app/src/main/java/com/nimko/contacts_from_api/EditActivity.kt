@@ -40,11 +40,8 @@ class EditActivity : AppCompatActivity(),Requestable {
             person = getPersonFromForm()
             if(!isEdit) {
                 apiClient.createContact(person!!, this)
-                allContacts.add(person!!)
             } else {
                 apiClient.editContact(person!!,this)
-                val id =  allContacts.indexOfFirst { person -> person.id == this.person!!.id }
-                allContacts[id] = person!!
             }
             sleep(1000)
             if (errMess.isNullOrBlank()) {

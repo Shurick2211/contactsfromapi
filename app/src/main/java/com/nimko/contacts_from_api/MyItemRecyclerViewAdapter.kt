@@ -4,33 +4,38 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.nimko.contacts_from_api.databinding.FragmentHeaderBinding
 import com.nimko.contacts_from_api.databinding.FragmentItemBinding
 import com.nimko.contacts_from_api.model.ItemForAdapter
 
 
-class MyItemRecyclerViewAdapter: RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>() {
-    var  values: MutableList<ItemForAdapter.Person> = ArrayList()
+class MyItemRecyclerViewAdapter: RecyclerView.Adapter<ItemsHolder>() {
+    var values: MutableList<ItemForAdapter> = ArrayList()
 
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(
-            FragmentItemBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
-        )
+    override fun getItemViewType(position: Int): Int {
+        if ( values[position].javaClass == ItemForAdapter.Person::class.java ) return 0
+        return 1
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemsHolder {
+        if (viewType == 1) return HeaderViewHolder(FragmentHeaderBinding
+                .inflate(LayoutInflater.from(parent.context),parent,false))
+
+        return PersonViewHolder(FragmentItemBinding
+            .inflate(LayoutInflater.from(parent.context),parent,false))
+
+    }
+
+    override fun onBindViewHolder(holder: ItemsHolder, position: Int) {
         holder.bind(values[position])
     }
 
-    fun addNewPerson(person:ItemForAdapter.Person){
+
+    fun addNewPerson(person:ItemForAdapter){
         values.add(person)
         refresh()
     }
-    fun addAllPersons(persons:Collection<ItemForAdapter.Person>){
+    fun addAllPersons(persons:Collection<ItemForAdapter>){
         values.clear()
         values.addAll(persons)
         refresh()
@@ -38,31 +43,8 @@ class MyItemRecyclerViewAdapter: RecyclerView.Adapter<MyItemRecyclerViewAdapter.
 
     @SuppressLint("NotifyDataSetChanged")
     fun refresh(){
-        values.sortBy { it.firstName }
+      //  values.sortBy { it.firstName }
         this.notifyDataSetChanged()
     }
-
-
     override fun getItemCount(): Int = values.size
-
-    inner class ViewHolder(val binding: FragmentItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ItemForAdapter.Person){
-            val click = AdapterClickListener(this.itemView.context)
-            binding.apply {
-                firstName.text = item.firstName
-                lastName.text = item.lastName
-                itemView.setOnClickListener { click.onClick(item) }
-                binding.callButton.setOnClickListener{ click.onClickCall(item) }
-                binding.emailButton.setOnClickListener{ click.onClickEmail(item)}
-            }
-        }
-    }
-
-    interface Clickable{
-        fun onClick(item: ItemForAdapter.Person)
-        fun onClickCall(item: ItemForAdapter.Person)
-        fun onClickEmail(item: ItemForAdapter.Person)
-    }
-
-
 }

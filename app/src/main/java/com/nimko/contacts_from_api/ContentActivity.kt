@@ -34,6 +34,9 @@ class ContentActivity : AppCompatActivity(), Requestable {
                 person = intent?.getSerializableExtra("new_person") as ItemForAdapter.Person
                 Log.d("My log content", person.toString())
                 addPerson()
+                val id =  allContacts
+                    .indexOfFirst { item -> item is ItemForAdapter.Person && item.id == this.person!!.id }
+                allContacts[id] = person!!
             }
         }
     }
@@ -58,7 +61,7 @@ class ContentActivity : AppCompatActivity(), Requestable {
 
     private fun delete() {
         ApiClient().deleteContact(person?.id!!,this)
-        allContacts.remove(person)
+        allContacts.remove(person as Any)
     }
 
     private fun edit() {
