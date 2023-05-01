@@ -2,15 +2,19 @@ package com.nimko.contacts_from_api
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.View
 import android.widget.SearchView
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -31,6 +35,7 @@ class MainActivity : AppCompatActivity(), Requestable {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        checkPermission()
         listInit();
         allContacts.add(0,ItemForAdapter.Header("Hello!"))
         startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult())
@@ -78,7 +83,6 @@ class MainActivity : AppCompatActivity(), Requestable {
     }
 
     private fun listInit() {
-
         makeRequestApi()
         binding.list.layoutManager = LinearLayoutManager(this)
         binding.list.adapter = adapter
@@ -98,6 +102,34 @@ class MainActivity : AppCompatActivity(), Requestable {
         val sType = object : TypeToken<List<ItemForAdapter.Person>>() { }.type
         allContacts = Gson().fromJson<List<ItemForAdapter.Person>>(request, sType).toMutableList()
 
+    }
+
+    private fun checkPermission() {
+        if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.CALL_PHONE) !=
+            PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                arrayOf(android.Manifest.permission.CALL_PHONE),
+                ACCESS)
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == ACCESS){
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Log.d("Call access", "allow")
+            } else {
+                Toast.makeText(this,R.string.call_deniede,Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private companion object{
+        const val ACCESS = 1
     }
 }
 

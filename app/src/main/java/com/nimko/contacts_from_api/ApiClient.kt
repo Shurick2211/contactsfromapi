@@ -94,4 +94,22 @@ class ApiClient {
         return result
     }
 
+    private fun execHttpSync(request: Request):String {
+        var result = "undefined"
+        try {
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) {
+                    Log.e("Error http",
+                        " ${response.code} ${response.message}")
+                    result = response.body?.string() ?: "${response.code}"
+                } else {
+                    result = response.body?.string() ?: "${response.code}"
+                    Log.d("Http OK", result)
+                }
+            }
+        } catch (e: IOException) {
+            Log.e("Error http", e.stackTraceToString())
+        }
+        return result
+    }
 }

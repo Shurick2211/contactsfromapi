@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
+import android.widget.Toast
 import com.nimko.contacts_from_api.model.ItemForAdapter
 
 class AdapterClickListener(
@@ -19,8 +21,15 @@ class AdapterClickListener(
     fun onClickCall(item: ItemForAdapter.Person) {
         val callIntent = Intent(Intent.ACTION_CALL)
         callIntent.data = Uri.parse("tel:${item.phoneNumber}")
-        context.startActivity(callIntent)
+        try{
+            context.startActivity(callIntent)
+        } catch (e:Exception){
+            Log.w("Call error", e.message.toString())
+            Toast.makeText(context,R.string.call_deniede, Toast.LENGTH_LONG).show()
+        }
+
     }
+
 
     @SuppressLint("IntentReset")
     fun onClickEmail(item: ItemForAdapter.Person) {
@@ -32,4 +41,6 @@ class AdapterClickListener(
         }
         context.startActivity(intentEmail)
     }
+
+
 }

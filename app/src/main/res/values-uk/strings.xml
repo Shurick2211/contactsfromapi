@@ -6,8 +6,8 @@
     <string name="phone_number">Номер телефону:</string>
     <string name="email">Пошта:</string>
     <string name="error_add">Заповни усі поля!</string>
-    <string name="wait">Почекай...</string>
     <string name="add_contact">Додати контакт</string>
     <string name="edit_activity">Редагувати контакт</string>
     <string name="content_activity">Контакт</string>
+    <string name="call_deniede">Заборонено виконувати дзвінки в застосунку!</string>
 </resources>
