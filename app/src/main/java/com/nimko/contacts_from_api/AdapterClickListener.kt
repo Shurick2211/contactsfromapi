@@ -25,7 +25,7 @@ class AdapterClickListener(
             context.startActivity(callIntent)
         } catch (e:Exception){
             Log.w("Call error", e.message.toString())
-            Toast.makeText(context,R.string.call_deniede, Toast.LENGTH_LONG).show()
+            Toast.makeText(context,R.string.call_deniede, Toast.LENGTH_SHORT).show()
         }
 
     }

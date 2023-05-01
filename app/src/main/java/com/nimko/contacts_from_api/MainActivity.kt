@@ -22,7 +22,7 @@ import com.nimko.contacts_from_api.databinding.ActivityMainBinding
 import com.nimko.contacts_from_api.model.ItemForAdapter
 import java.lang.Thread.sleep
 
-lateinit var allContacts:MutableList<Any>
+lateinit var allContacts:MutableList<ItemForAdapter.Person>
 class MainActivity : AppCompatActivity(), Requestable {
 
     private lateinit var binding: ActivityMainBinding
@@ -37,7 +37,6 @@ class MainActivity : AppCompatActivity(), Requestable {
         setContentView(binding.root)
         checkPermission()
         listInit();
-        allContacts.add(0,ItemForAdapter.Header("Hello!"))
         startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult())
         { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -51,10 +50,8 @@ class MainActivity : AppCompatActivity(), Requestable {
 
     override fun onResume() {
         super.onResume()
-        if(!adapter.values.containsAll(allContacts)
-            || !allContacts.containsAll(adapter.values)) {
-            adapter.addAllPersons(allContacts as Collection<ItemForAdapter>)
-        }
+        allContacts.sortBy { it.firstName.uppercase() }
+        adapter.addAllPersons(allContacts as MutableList<ItemForAdapter>)
     }
 
 
@@ -70,8 +67,6 @@ class MainActivity : AppCompatActivity(), Requestable {
             override fun onQueryTextChange(ch: String?): Boolean {
                 adapter.values = if (!ch.isNullOrBlank()) {
                     allContacts
-                        .filter { it is ItemForAdapter.Person }
-                        .map{it as ItemForAdapter.Person}
                         .filter {"${it.firstName.lowercase()} ${it.lastName.lowercase()}"
                         .contains(ch.lowercase())} as MutableList<ItemForAdapter>
                 }else{allContacts as MutableList<ItemForAdapter>}
@@ -123,7 +118,7 @@ class MainActivity : AppCompatActivity(), Requestable {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 Log.d("Call access", "allow")
             } else {
-                Toast.makeText(this,R.string.call_deniede,Toast.LENGTH_LONG).show()
+                Toast.makeText(this,R.string.call_deniede,Toast.LENGTH_SHORT).show()
             }
         }
     }
