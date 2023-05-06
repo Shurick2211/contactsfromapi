@@ -11,6 +11,8 @@ import android.view.MenuItem
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import com.nimko.contacts_from_api.api_services.ApiClient
+import com.nimko.contacts_from_api.api_services.Requestable
 import com.nimko.contacts_from_api.databinding.ActivityContentBinding
 import com.nimko.contacts_from_api.model.ItemForAdapter
 

@@ -18,6 +18,9 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.nimko.contacts_from_api.adapter.MyItemRecyclerViewAdapter
+import com.nimko.contacts_from_api.api_services.ApiClient
+import com.nimko.contacts_from_api.api_services.Requestable
 import com.nimko.contacts_from_api.databinding.ActivityMainBinding
 import com.nimko.contacts_from_api.model.ItemForAdapter
 import java.lang.Thread.sleep
@@ -28,7 +31,7 @@ class MainActivity : AppCompatActivity(), Requestable {
     private lateinit var binding: ActivityMainBinding
     private val adapter: MyItemRecyclerViewAdapter = MyItemRecyclerViewAdapter( )
     private var startForResult:ActivityResultLauncher<Intent>? = null
-    private val apiClient:ApiClient = ApiClient()
+    private val apiClient: ApiClient = ApiClient()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,7 +54,7 @@ class MainActivity : AppCompatActivity(), Requestable {
     override fun onResume() {
         super.onResume()
         allContacts.sortBy { it.firstName.uppercase() }
-        adapter.addAllPersons(allContacts as MutableList<ItemForAdapter>)
+        adapter.addAllPersons(allContacts)
     }
 
 
@@ -68,8 +71,8 @@ class MainActivity : AppCompatActivity(), Requestable {
                 adapter.values = if (!ch.isNullOrBlank()) {
                     allContacts
                         .filter {"${it.firstName.lowercase()} ${it.lastName.lowercase()}"
-                        .contains(ch.lowercase())} as MutableList<ItemForAdapter>
-                }else{allContacts as MutableList<ItemForAdapter>}
+                            .contains(ch.lowercase())}.toMutableList()
+                } else {allContacts.toMutableList() }
                 adapter.refresh()
                 return false
             }

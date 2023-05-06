@@ -1,6 +1,6 @@
 package com.nimko.contacts_from_api.model
 
-sealed class ItemForAdapter{
+sealed class ItemForAdapter : java.io.Serializable{
 
     data class Person(
         val id:Long?,
@@ -10,9 +10,9 @@ sealed class ItemForAdapter{
         val email : String,
         val app : String,
         val date : String?
-    ):java.io.Serializable
+    ) : ItemForAdapter()
 
     data class Header(
         val title:String
-    )
+    ) : ItemForAdapter()
 }

@@ -8,13 +8,15 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
+import com.nimko.contacts_from_api.api_services.ApiClient
+import com.nimko.contacts_from_api.api_services.Requestable
 import com.nimko.contacts_from_api.databinding.ActivityEditBinding
 import com.nimko.contacts_from_api.model.ItemForAdapter
 import java.lang.Thread.sleep
 
-class EditActivity : AppCompatActivity(),Requestable {
+class EditActivity : AppCompatActivity(), Requestable {
     private lateinit var binding: ActivityEditBinding
-    private val apiClient:ApiClient = ApiClient()
+    private val apiClient: ApiClient = ApiClient()
     private var person:ItemForAdapter.Person? = null
     private var errMess:String? = null
     private var isEdit = false

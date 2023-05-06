@@ -1,4 +1,4 @@
-package com.nimko.contacts_from_api
+package com.nimko.contacts_from_api.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -6,6 +6,8 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
+import com.nimko.contacts_from_api.ContentActivity
+import com.nimko.contacts_from_api.R
 import com.nimko.contacts_from_api.model.ItemForAdapter
 
 class AdapterClickListener(
@@ -25,7 +27,7 @@ class AdapterClickListener(
             context.startActivity(callIntent)
         } catch (e:Exception){
             Log.w("Call error", e.message.toString())
-            Toast.makeText(context,R.string.call_deniede, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, R.string.call_deniede, Toast.LENGTH_SHORT).show()
         }
 
     }

@@ -1,4 +1,4 @@
-package com.nimko.contacts_from_api
+package com.nimko.contacts_from_api.adapter
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
@@ -7,11 +7,11 @@ import com.nimko.contacts_from_api.databinding.FragmentItemBinding
 import com.nimko.contacts_from_api.model.ItemForAdapter
 
 abstract class ItemsHolder(binding: ViewBinding) : RecyclerView.ViewHolder(binding.root){
-    abstract fun bind(item: Any)
+    abstract fun bind(item: ItemForAdapter)
 }
 
 class PersonViewHolder(val binding: FragmentItemBinding) : ItemsHolder(binding)  {
-    override fun bind(item: Any){
+    override fun bind(item: ItemForAdapter){
         item as ItemForAdapter.Person
         val click = AdapterClickListener(this.itemView.context)
         binding.apply {
@@ -27,7 +27,7 @@ class PersonViewHolder(val binding: FragmentItemBinding) : ItemsHolder(binding) 
 
 
 class HeaderViewHolder(val binding: FragmentHeaderBinding) : ItemsHolder(binding) {
-    override fun bind(item: Any){
+    override fun bind(item: ItemForAdapter){
         item as ItemForAdapter.Header
         binding.apply {
             title.text = item.title

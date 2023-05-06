@@ -1,4 +1,4 @@
-package com.nimko.contacts_from_api
+package com.nimko.contacts_from_api.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -13,12 +13,15 @@ class MyItemRecyclerViewAdapter: RecyclerView.Adapter<ItemsHolder>() {
     var values: MutableList<ItemForAdapter> = ArrayList()
 
     override fun getItemViewType(position: Int): Int {
-        if ( values[position].javaClass == ItemForAdapter.Person::class.java ) return 0
-        return 1
+        when(values[position]){
+            is ItemForAdapter.Person -> return ITEM
+            is ItemForAdapter.Header -> return HEADER
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemsHolder {
-        if (viewType == 1) return HeaderViewHolder(FragmentHeaderBinding
+
+        if (viewType == HEADER) return HeaderViewHolder(FragmentHeaderBinding
                 .inflate(LayoutInflater.from(parent.context),parent,false))
 
         return PersonViewHolder(FragmentItemBinding
@@ -47,4 +50,9 @@ class MyItemRecyclerViewAdapter: RecyclerView.Adapter<ItemsHolder>() {
         this.notifyDataSetChanged()
     }
     override fun getItemCount(): Int = values.size
+
+    companion object{
+        const val ITEM = 0
+        const val HEADER = 1
+    }
 }

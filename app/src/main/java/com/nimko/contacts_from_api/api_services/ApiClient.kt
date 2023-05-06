@@ -1,4 +1,4 @@
-package com.nimko.contacts_from_api
+package com.nimko.contacts_from_api.api_services
 
 import android.util.Log
 import com.google.gson.GsonBuilder
