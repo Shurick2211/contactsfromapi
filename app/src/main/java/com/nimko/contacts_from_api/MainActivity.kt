@@ -25,7 +25,7 @@ import com.nimko.contacts_from_api.databinding.ActivityMainBinding
 import com.nimko.contacts_from_api.model.ItemForAdapter
 import java.lang.Thread.sleep
 
-lateinit var allContacts:MutableList<ItemForAdapter.Person>
+var allContacts:MutableList<ItemForAdapter.Person> = ArrayList()
 class MainActivity : AppCompatActivity(), Requestable {
 
     private lateinit var binding: ActivityMainBinding
@@ -102,17 +102,17 @@ class MainActivity : AppCompatActivity(), Requestable {
     }
 
     private fun listInit() {
-        makeRequestApi()
+        apiClient.getAllContacts(this)
         binding.list.layoutManager = LinearLayoutManager(this)
         binding.list.adapter = adapter
+        adapter.values.add(ItemForAdapter.Header(R.string.wait.toString()))
+        adapter.refresh()
+        while(allContacts.isEmpty()){
+            sleep(50)
+        }
         refreshList(allContacts)
     }
 
-    private fun makeRequestApi(){
-        apiClient.getAllContacts(this)
-        sleep(1000)
-        adapter.addAllPersons(allContacts as Collection<ItemForAdapter>)
-    }
 
     fun onClickAdd(view:View){
         startForResult?.launch(Intent(this, EditActivity::class.java))

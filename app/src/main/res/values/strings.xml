@@ -9,4 +9,5 @@
     <string name="edit_activity">Edit contact</string>
     <string name="content_activity">Contact</string>
     <string name="call_deniede">Call is deniede in app!</string>
+    <string name="wait">WAIT contacts from API...</string>
 </resources>

@@ -10,4 +10,5 @@
     <string name="edit_activity">Редагувати контакт</string>
     <string name="content_activity">Контакт</string>
     <string name="call_deniede">Заборонено виконувати дзвінки в застосунку!</string>
+    <string name="wait">Чекаємо на контакти з API...</string>
 </resources>
