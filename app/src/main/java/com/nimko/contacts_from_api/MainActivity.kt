@@ -53,12 +53,28 @@ class MainActivity : AppCompatActivity(), Requestable {
 
     override fun onResume() {
         super.onResume()
-        allContacts.sortBy { it.firstName.uppercase() }
+
         if(!allContacts.containsAll(adapter.values.filter { it is ItemForAdapter.Person })
             || !adapter.values.filter { it is ItemForAdapter.Person }.containsAll(allContacts)) {
-            adapter.addAllPersons(allContacts)
-            Log.d("List","Refresh")
+            refreshList(allContacts)
         }
+    }
+
+    private fun refreshList(allContacts: MutableList<ItemForAdapter.Person>) {
+        allContacts.sortBy { it.firstName.uppercase() }
+        var ch = allContacts[0].firstName[0]
+        adapter.values.clear()
+        adapter.values.add(ItemForAdapter.Header(ch.toString()))
+        allContacts.forEach {
+            val startCh = it.firstName[0]
+            if(startCh != ch) {
+                adapter.values.add(ItemForAdapter.Header(startCh.toString()))
+                ch = startCh
+            }
+            adapter.values.add(it)
+        }
+        adapter.refresh()
+        Log.d("List","Refresh")
     }
 
 
@@ -88,6 +104,7 @@ class MainActivity : AppCompatActivity(), Requestable {
         makeRequestApi()
         binding.list.layoutManager = LinearLayoutManager(this)
         binding.list.adapter = adapter
+        refreshList(allContacts)
     }
 
     private fun makeRequestApi(){
@@ -129,6 +146,7 @@ class MainActivity : AppCompatActivity(), Requestable {
             }
         }
     }
+
 
     private companion object{
         const val ACCESS = 1
