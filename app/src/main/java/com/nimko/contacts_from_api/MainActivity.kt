@@ -53,7 +53,6 @@ class MainActivity : AppCompatActivity(), Requestable {
 
     override fun onResume() {
         super.onResume()
-
         if(!allContacts.containsAll(adapter.values.filter { it is ItemForAdapter.Person })
             || !adapter.values.filter { it is ItemForAdapter.Person }.containsAll(allContacts)) {
             refreshList(allContacts)
@@ -61,7 +60,7 @@ class MainActivity : AppCompatActivity(), Requestable {
     }
 
     private fun refreshList(allContacts: MutableList<ItemForAdapter.Person>) {
-        allContacts.sortBy { it.firstName.uppercase() }
+        allContacts.sortBy { it.firstName }
         var ch = allContacts[0].firstName[0]
         adapter.values.clear()
         adapter.values.add(ItemForAdapter.Header(ch.toString()))
@@ -88,13 +87,15 @@ class MainActivity : AppCompatActivity(), Requestable {
                 return false
             }
             override fun onQueryTextChange(ch: String?): Boolean {
-                adapter.values = if (!ch.isNullOrBlank()) {
-                    allContacts
+                 if (!ch.isNullOrBlank()) {
+                    adapter.values = allContacts
                         .filter {"${it.firstName.lowercase()} ${it.lastName.lowercase()}"
                             .contains(ch.lowercase())}.toMutableList()
-                } else {allContacts.toMutableList() }
-                adapter.refresh()
-                return false
+                    adapter.refresh()
+                } else {
+                    refreshList(allContacts)
+                }
+                return true
             }
         })
         return true
