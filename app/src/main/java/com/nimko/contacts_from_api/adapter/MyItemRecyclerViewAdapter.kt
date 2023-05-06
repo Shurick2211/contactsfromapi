@@ -46,7 +46,6 @@ class MyItemRecyclerViewAdapter: RecyclerView.Adapter<ItemsHolder>() {
 
     @SuppressLint("NotifyDataSetChanged")
     fun refresh(){
-      //  values.sortBy { it.firstName }
         this.notifyDataSetChanged()
     }
     override fun getItemCount(): Int = values.size

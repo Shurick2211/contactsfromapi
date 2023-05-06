@@ -54,7 +54,11 @@ class MainActivity : AppCompatActivity(), Requestable {
     override fun onResume() {
         super.onResume()
         allContacts.sortBy { it.firstName.uppercase() }
-        adapter.addAllPersons(allContacts)
+        if(!allContacts.containsAll(adapter.values.filter { it is ItemForAdapter.Person })
+            || !adapter.values.filter { it is ItemForAdapter.Person }.containsAll(allContacts)) {
+            adapter.addAllPersons(allContacts)
+            Log.d("List","Refresh")
+        }
     }
 
 
