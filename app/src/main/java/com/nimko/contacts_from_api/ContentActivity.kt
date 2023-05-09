@@ -3,8 +3,6 @@ package com.nimko.contacts_from_api
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.ColorSpace.Model
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -12,17 +10,17 @@ import android.view.MenuItem
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.lifecycle.ViewModelProvider
+import androidx.appcompat.app.AppCompatActivity
 import com.nimko.contacts_from_api.api_services.ApiClient
 import com.nimko.contacts_from_api.api_services.Requestable
 import com.nimko.contacts_from_api.databinding.ActivityContentBinding
 import com.nimko.contacts_from_api.model.ItemForAdapter
-import com.nimko.contacts_from_api.model.MyViewModel
 
 class ContentActivity : AppCompatActivity(), Requestable {
     private lateinit var binding : ActivityContentBinding
     var person:ItemForAdapter.Person? = null
     private var startForResult: ActivityResultLauncher<Intent>? = null
+    private var intentResult: Intent? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityContentBinding.inflate(layoutInflater)
@@ -35,8 +33,8 @@ class ContentActivity : AppCompatActivity(), Requestable {
         startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult())
         { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
-                val intent = result.data
-                person = intent?.getSerializableExtra("new_person") as ItemForAdapter.Person
+                intentResult = result.data
+                person = intentResult?.getSerializableExtra("new_person") as ItemForAdapter.Person
                 Log.d("My log content", person.toString())
                 addPerson()
             }
@@ -63,6 +61,7 @@ class ContentActivity : AppCompatActivity(), Requestable {
 
     private fun delete() {
         ApiClient().deleteContact(person?.id!!,this)
+        finish()
     }
 
     private fun edit() {
@@ -79,4 +78,5 @@ class ContentActivity : AppCompatActivity(), Requestable {
     override fun getRequest(request: String) {
         finish()
     }
+
 }
