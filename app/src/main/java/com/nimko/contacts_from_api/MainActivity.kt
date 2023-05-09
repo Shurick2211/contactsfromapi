@@ -43,21 +43,24 @@ class MainActivity : AppCompatActivity() {
             if (result.resultCode == Activity.RESULT_OK) {
                 val intent = result.data
                 val person = intent?.getSerializableExtra("new_person") as ItemForAdapter.Person
-                model.addPerson(person)
                 Log.d("MainActivity result", person.toString())
             }
         }
 
-        model = ViewModelProvider(this).get(MyViewModel::class.java)
-
         binding.list.layoutManager = LinearLayoutManager(this)
         binding.list.adapter = adapter
+
+        model = ViewModelProvider(this).get(MyViewModel::class.java)
         model.values.observe(this, {
             refreshList(it)
             Log.d("MainActivity", "Observer")
         })
     }
 
+    override fun onResume() {
+        super.onResume()
+        model.apiReq()
+    }
     private fun refreshList(allContacts: MutableList<ItemForAdapter.Person>) {
         allContacts.sortBy { it.firstName }
         var ch = allContacts[0].firstName[0]

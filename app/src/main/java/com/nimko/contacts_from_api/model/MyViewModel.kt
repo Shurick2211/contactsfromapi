@@ -6,20 +6,17 @@ import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.nimko.contacts_from_api.api_services.ApiClient
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class MyViewModel : ViewModel() {
     var values: MutableLiveData<MutableList<ItemForAdapter.Person>> = MutableLiveData()
-
-
     private val client = ApiClient()
 
-    init {
-        apiReq()
-    }
 
+    @OptIn(DelicateCoroutinesApi::class)
     fun apiReq() {
         GlobalScope.launch {
                 val request = async {
@@ -40,14 +37,6 @@ class MyViewModel : ViewModel() {
         } else values.value!!.toMutableList()
     }
 
-    fun addPerson(person:ItemForAdapter.Person){
-        values.value!!.add(person)
-        values.postValue(values.value)
-    }
 
-    fun removePerson(person:ItemForAdapter.Person){
-        values.value!!.remove(person)
-        values.postValue(values.value)
-    }
 
 }
