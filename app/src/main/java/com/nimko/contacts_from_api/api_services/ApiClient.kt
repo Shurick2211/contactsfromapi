@@ -3,10 +3,13 @@ package com.nimko.contacts_from_api.api_services
 import android.util.Log
 import com.google.gson.GsonBuilder
 import com.nimko.contacts_from_api.model.ItemForAdapter
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
+
 
 class ApiClient {
     private val url = "http://contacts-book.eba-skm39mww.eu-central-1.elasticbeanstalk.com/contacts"
@@ -20,13 +23,14 @@ class ApiClient {
         return put(person, apiRequest)
     }
 
-    fun getAllContacts(apiRequest: Requestable):String{
-        return get(url, apiRequest)
+     fun getAllContacts(): String {
+
+        return get(url)
     }
 
-    fun getContactByEmail(email:String, apiRequest: Requestable):String{
-        return get("$url/$email", apiRequest)
-    }
+//    fun getContactByEmail(email:String, apiRequest: Requestable):String{
+//        return get("$url/$email", apiRequest)
+//    }
 
     fun deleteContact(id:Long, apiRequest: Requestable):String{
         return delete(id, apiRequest)
@@ -40,15 +44,15 @@ class ApiClient {
         return execHttpAsync(request, apiRequest)
     }
 
-    fun getContactByPhone(phone:String, apiRequest: Requestable):String{
-        return get("$url/phones?phone=$phone", apiRequest)
-    }
+//    fun getContactByPhone(phone:String, apiRequest: Requestable):String{
+//        return get("$url/phones?phone=$phone", apiRequest)
+//    }
 
-    private fun get(url:String, apiRequest: Requestable):String{
+     fun get(url:String): String {
         val request =  Request.Builder()
             .url(url)
             .build();
-        return execHttpAsync(request, apiRequest)
+        return execHttpSync(request)//execHttpAsync(request, apiRequest)
     }
 
     private fun put(person:ItemForAdapter.Person, apiRequest: Requestable):String{
@@ -94,7 +98,7 @@ class ApiClient {
         return result
     }
 
-    private fun execHttpSync(request: Request):String {
+    fun execHttpSync(request: Request):String {
         var result = "undefined"
         try {
             client.newCall(request).execute().use { response ->

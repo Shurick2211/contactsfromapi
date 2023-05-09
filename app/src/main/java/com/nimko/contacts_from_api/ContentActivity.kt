@@ -3,6 +3,7 @@ package com.nimko.contacts_from_api
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.ColorSpace.Model
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,10 +12,12 @@ import android.view.MenuItem
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.ViewModelProvider
 import com.nimko.contacts_from_api.api_services.ApiClient
 import com.nimko.contacts_from_api.api_services.Requestable
 import com.nimko.contacts_from_api.databinding.ActivityContentBinding
 import com.nimko.contacts_from_api.model.ItemForAdapter
+import com.nimko.contacts_from_api.model.MyViewModel
 
 class ContentActivity : AppCompatActivity(), Requestable {
     private lateinit var binding : ActivityContentBinding
@@ -36,9 +39,6 @@ class ContentActivity : AppCompatActivity(), Requestable {
                 person = intent?.getSerializableExtra("new_person") as ItemForAdapter.Person
                 Log.d("My log content", person.toString())
                 addPerson()
-                val id =  allContacts
-                    .indexOfFirst { item -> item is ItemForAdapter.Person && item.id == this.person!!.id }
-                allContacts[id] = person!!
             }
         }
     }
@@ -63,7 +63,6 @@ class ContentActivity : AppCompatActivity(), Requestable {
 
     private fun delete() {
         ApiClient().deleteContact(person?.id!!,this)
-        allContacts.remove(person as Any)
     }
 
     private fun edit() {
