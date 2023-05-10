@@ -39,6 +39,7 @@ class EditActivity : AppCompatActivity(), Requestable {
             && binding.lastName.text.isNotBlank()
             && binding.email.text.isNotBlank()
             && binding.phoneNumber.text.isNotBlank()) {
+            view.isClickable = false
             person = getPersonFromForm()
             if(!isEdit) {
                 apiClient.createContact(person!!, this)
@@ -57,6 +58,7 @@ class EditActivity : AppCompatActivity(), Requestable {
         }
         binding.errorText.text = errMess
         errMess = null
+        view.isClickable = true
     }
 
     private fun getPersonFromForm(): ItemForAdapter.Person{
