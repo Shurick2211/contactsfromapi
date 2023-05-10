@@ -17,16 +17,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nimko.contacts_from_api.EditActivity
 import com.nimko.contacts_from_api.R
+import com.nimko.contacts_from_api.adapter.ClickItem
 import com.nimko.contacts_from_api.adapter.MyItemRecyclerViewAdapter
 import com.nimko.contacts_from_api.databinding.FragmentMainBinding
 import com.nimko.contacts_from_api.model.ItemForAdapter
 import com.nimko.contacts_from_api.model.MyViewModel
 
 
-class MainFragment : Fragment() {
+class MainFragment(val click:ClickItem) : Fragment() {
 
     private lateinit var binding:FragmentMainBinding
-    private val adapter: MyItemRecyclerViewAdapter = MyItemRecyclerViewAdapter()
+    private var adapter: MyItemRecyclerViewAdapter? = null
     private var startForResult: ActivityResultLauncher<Intent>? = null
     private lateinit var model: MyViewModel
 
@@ -56,12 +57,12 @@ class MainFragment : Fragment() {
                 Log.d("MainActivity result", person.toString())
             }
         }
-
+        adapter = MyItemRecyclerViewAdapter(click)
         binding.list.layoutManager = LinearLayoutManager(context)
         binding.list.adapter = adapter
 
         model = ViewModelProvider(this).get(MyViewModel::class.java)
-        model.values.observe(this, {
+        model.values.observe(viewLifecycleOwner, {
             refreshList(it)
             Log.d("MainActivity", "Observer")
         })
@@ -71,8 +72,8 @@ class MainFragment : Fragment() {
 
     private fun progressBar(){
         val waitProgres = ItemForAdapter.Header("", true)
-        adapter.values.add(0, waitProgres)
-        adapter.refresh()
+        adapter!!.values.add(0, waitProgres)
+        adapter!!.refresh()
     }
 
     override fun onResume() {
@@ -84,17 +85,17 @@ class MainFragment : Fragment() {
     private fun refreshList(allContacts: MutableList<ItemForAdapter.Person>) {
         allContacts.sortBy { it.firstName }
         var ch = allContacts[0].firstName[0]
-        adapter.values.clear()
-        adapter.values.add(ItemForAdapter.Header(ch.toString(), false))
+        adapter!!.values.clear()
+        adapter!!.values.add(ItemForAdapter.Header(ch.toString(), false))
         allContacts.forEach {
             val startCh = it.firstName[0]
             if (startCh != ch) {
-                adapter.values.add(ItemForAdapter.Header(startCh.toString(),false))
+                adapter!!.values.add(ItemForAdapter.Header(startCh.toString(),false))
                 ch = startCh
             }
-            adapter.values.add(it)
+            adapter!!.values.add(it)
         }
-        adapter.refresh()
+        adapter!!.refresh()
         Log.d("List", "Refresh")
     }
 
@@ -108,8 +109,8 @@ class MainFragment : Fragment() {
             }
             override fun onQueryTextChange(ch: String?): Boolean {
                 if (!ch.isNullOrBlank()) {
-                    adapter.values = model.find(ch).toMutableList()
-                    adapter.refresh()
+                    adapter!!.values = model.find(ch).toMutableList()
+                    adapter!!.refresh()
                 } else {refreshList(model.find(null))}
                 return true
             }
@@ -120,7 +121,7 @@ class MainFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance() =
-            MainFragment()
+        fun newInstance(click: ClickItem) =
+            MainFragment(click)
     }
 }

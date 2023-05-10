@@ -9,7 +9,7 @@ import com.nimko.contacts_from_api.databinding.FragmentItemBinding
 import com.nimko.contacts_from_api.model.ItemForAdapter
 
 
-class MyItemRecyclerViewAdapter: RecyclerView.Adapter<ItemsHolder>() {
+class MyItemRecyclerViewAdapter(val clickItem: ClickItem): RecyclerView.Adapter<ItemsHolder>() {
     var values: MutableList<ItemForAdapter> = ArrayList()
 
     override fun getItemViewType(position: Int): Int {
@@ -22,10 +22,10 @@ class MyItemRecyclerViewAdapter: RecyclerView.Adapter<ItemsHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemsHolder {
 
         if (viewType == HEADER) return HeaderViewHolder(FragmentHeaderBinding
-                .inflate(LayoutInflater.from(parent.context),parent,false))
+                .inflate(LayoutInflater.from(parent.context),parent,false), clickItem)
 
         return PersonViewHolder(FragmentItemBinding
-            .inflate(LayoutInflater.from(parent.context),parent,false))
+            .inflate(LayoutInflater.from(parent.context),parent,false), clickItem)
 
     }
 

@@ -7,27 +7,31 @@ import com.nimko.contacts_from_api.databinding.FragmentHeaderBinding
 import com.nimko.contacts_from_api.databinding.FragmentItemBinding
 import com.nimko.contacts_from_api.model.ItemForAdapter
 
-abstract class ItemsHolder(binding: ViewBinding) : RecyclerView.ViewHolder(binding.root){
+abstract class ItemsHolder(binding: ViewBinding,val click:ClickItem) : RecyclerView.ViewHolder(binding.root){
     abstract fun bind(item: ItemForAdapter)
 }
 
-class PersonViewHolder(val binding: FragmentItemBinding) : ItemsHolder(binding)  {
+class PersonViewHolder(val binding: FragmentItemBinding, click: ClickItem) : ItemsHolder(binding,
+    click
+)  {
     override fun bind(item: ItemForAdapter){
         item as ItemForAdapter.Person
-        val click = AdapterClickListener(this.itemView.context)
+        val clickEmailOrCall = AdapterClickListener(this.itemView.context)
         binding.apply {
             firstName.text = item.firstName
             lastName.text = item.lastName
-            itemView.setOnClickListener { click.onClick(item) }
-            binding.callButton.setOnClickListener { click.onClickCall(item) }
-            binding.emailButton.setOnClickListener { click.onClickEmail(item) }
+            itemView.setOnClickListener { click.click(item) }
+            binding.callButton.setOnClickListener { clickEmailOrCall.onClickCall(item) }
+            binding.emailButton.setOnClickListener { clickEmailOrCall.onClickEmail(item) }
         }
     }
 
 }
 
 
-class HeaderViewHolder(val binding: FragmentHeaderBinding) : ItemsHolder(binding) {
+class HeaderViewHolder(val binding: FragmentHeaderBinding, click: ClickItem) : ItemsHolder(binding,
+    click
+) {
     override fun bind(item: ItemForAdapter){
         item as ItemForAdapter.Header
         binding.apply {

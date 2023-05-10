@@ -7,11 +7,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.nimko.contacts_from_api.adapter.ClickItem
 import com.nimko.contacts_from_api.databinding.ActivityMainBinding
+import com.nimko.contacts_from_api.fragment.ContentFragment
 import com.nimko.contacts_from_api.fragment.MainFragment
+import com.nimko.contacts_from_api.model.ItemForAdapter
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ClickItem {
 
     private lateinit var binding: ActivityMainBinding
 
@@ -22,15 +25,19 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
+        mainFragment()
+    }
 
+    override fun onBackPressed() {
+        mainFragment()
+    }
+
+    private fun mainFragment(){
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainerView, MainFragment.newInstance())
+            .replace(R.id.fragmentContainerView, MainFragment.newInstance(this))
             .commit()
         checkPermission()
     }
-
-
-
     private fun checkPermission() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CALL_PHONE) !=
             PackageManager.PERMISSION_GRANTED
@@ -61,6 +68,12 @@ class MainActivity : AppCompatActivity() {
 
     private companion object {
         const val ACCESS = 1
+    }
+
+    override fun click(item: ItemForAdapter) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainerView, ContentFragment.newInstance(item))
+            .commit()
     }
 }
 
