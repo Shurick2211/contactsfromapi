@@ -49,12 +49,19 @@ class MainActivity : AppCompatActivity() {
 
         binding.list.layoutManager = LinearLayoutManager(this)
         binding.list.adapter = adapter
+        progressBar(true)
 
         model = ViewModelProvider(this).get(MyViewModel::class.java)
         model.values.observe(this, {
             refreshList(it)
             Log.d("MainActivity", "Observer")
         })
+    }
+
+    private fun progressBar(visible:Boolean){
+        val waitProgres = ItemForAdapter.Header("", visible)
+        adapter.values.add(0, waitProgres)
+        adapter.refresh()
     }
 
     override fun onResume() {
@@ -65,11 +72,11 @@ class MainActivity : AppCompatActivity() {
         allContacts.sortBy { it.firstName }
         var ch = allContacts[0].firstName[0]
         adapter.values.clear()
-        adapter.values.add(ItemForAdapter.Header(ch.toString()))
+        adapter.values.add(ItemForAdapter.Header(ch.toString(), false))
         allContacts.forEach {
             val startCh = it.firstName[0]
             if (startCh != ch) {
-                adapter.values.add(ItemForAdapter.Header(startCh.toString()))
+                adapter.values.add(ItemForAdapter.Header(startCh.toString(),false))
                 ch = startCh
             }
             adapter.values.add(it)

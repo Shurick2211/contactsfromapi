@@ -13,6 +13,7 @@ sealed class ItemForAdapter : java.io.Serializable{
     ) : ItemForAdapter()
 
     data class Header(
-        val title:String
+        val title:String,
+        var progress:Boolean
     ) : ItemForAdapter()
 }

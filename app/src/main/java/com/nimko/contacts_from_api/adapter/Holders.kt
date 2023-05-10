@@ -1,5 +1,6 @@
 package com.nimko.contacts_from_api.adapter
 
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.nimko.contacts_from_api.databinding.FragmentHeaderBinding
@@ -31,6 +32,8 @@ class HeaderViewHolder(val binding: FragmentHeaderBinding) : ItemsHolder(binding
         item as ItemForAdapter.Header
         binding.apply {
             title.text = item.title
+            if(item.progress) progressBar.visibility = View.VISIBLE
+            else progressBar.visibility = View.GONE
         }
     }
 
