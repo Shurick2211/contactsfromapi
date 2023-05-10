@@ -49,7 +49,6 @@ class MainActivity : AppCompatActivity() {
 
         binding.list.layoutManager = LinearLayoutManager(this)
         binding.list.adapter = adapter
-        progressBar(true)
 
         model = ViewModelProvider(this).get(MyViewModel::class.java)
         model.values.observe(this, {
@@ -58,14 +57,15 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun progressBar(visible:Boolean){
-        val waitProgres = ItemForAdapter.Header("", visible)
+    private fun progressBar(){
+        val waitProgres = ItemForAdapter.Header("", true)
         adapter.values.add(0, waitProgres)
         adapter.refresh()
     }
 
     override fun onResume() {
         super.onResume()
+        progressBar()
         model.apiReq()
     }
     private fun refreshList(allContacts: MutableList<ItemForAdapter.Person>) {
