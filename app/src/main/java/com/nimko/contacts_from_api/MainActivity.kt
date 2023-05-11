@@ -8,13 +8,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.nimko.contacts_from_api.adapter.ClickItem
+import com.nimko.contacts_from_api.api_services.Requestable
 import com.nimko.contacts_from_api.databinding.ActivityMainBinding
+import com.nimko.contacts_from_api.fragment.Commandable
 import com.nimko.contacts_from_api.fragment.ContentFragment
 import com.nimko.contacts_from_api.fragment.MainFragment
 import com.nimko.contacts_from_api.model.ItemForAdapter
 
 
-class MainActivity : AppCompatActivity(), ClickItem {
+class MainActivity : AppCompatActivity(), ClickItem, Requestable, Commandable {
 
     private lateinit var binding: ActivityMainBinding
 
@@ -63,14 +65,24 @@ class MainActivity : AppCompatActivity(), ClickItem {
     }
 
 
+
     private companion object {
         const val ACCESS = 1
     }
 
     override fun click(item: ItemForAdapter) {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainerView, ContentFragment.newInstance(item))
+            .addToBackStack(null)
+            .replace(R.id.fragmentContainerView, ContentFragment.newInstance(item, this))
             .commit()
+    }
+
+    override fun getRequest(request: String) {
+       Log.d("Response Main", request)
+    }
+
+    override fun goBack() {
+        onBackPressed()
     }
 }
 

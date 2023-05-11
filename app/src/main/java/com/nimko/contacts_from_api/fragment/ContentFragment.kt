@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
+import com.nimko.contacts_from_api.MainActivity
 import com.nimko.contacts_from_api.R
+import com.nimko.contacts_from_api.api_services.ApiClient
 import com.nimko.contacts_from_api.databinding.FragmentContentBinding
 import com.nimko.contacts_from_api.model.ItemForAdapter
 
-class ContentFragment(val item: ItemForAdapter) : Fragment() {
+class ContentFragment(val item: ItemForAdapter, val command:Commandable) : Fragment() {
 
     lateinit var binding:FragmentContentBinding
     val person:ItemForAdapter.Person = item as ItemForAdapter.Person
@@ -41,7 +43,8 @@ class ContentFragment(val item: ItemForAdapter) : Fragment() {
 
 
     private fun delete() {
-        Log.d("MenuContent", "delete")
+        ApiClient().deleteContact(person.id!!, activity as MainActivity)
+        command.goBack()
     }
 
     private fun edit() {
@@ -52,8 +55,8 @@ class ContentFragment(val item: ItemForAdapter) : Fragment() {
     companion object {
 
         @JvmStatic
-        fun newInstance(item:ItemForAdapter) =
-            ContentFragment(item)
+        fun newInstance(item:ItemForAdapter, command:Commandable) =
+            ContentFragment(item, command)
 
     }
 }
