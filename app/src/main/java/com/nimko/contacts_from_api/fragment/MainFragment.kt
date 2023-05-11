@@ -42,6 +42,7 @@ class MainFragment(val click:ClickItem) : Fragment() {
     ): View? {
         binding = FragmentMainBinding.inflate(inflater,container,false)
         binding.toolbar.inflateMenu(R.menu.menu)
+        binding.toolbar.setTitle(R.string.app_name)
         binding.toolbar.menu.apply {
             onCreateOptionsMenu(this)
         }

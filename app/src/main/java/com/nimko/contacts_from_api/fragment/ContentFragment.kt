@@ -1,9 +1,8 @@
 package com.nimko.contacts_from_api.fragment
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
 import com.nimko.contacts_from_api.R
 import com.nimko.contacts_from_api.databinding.FragmentContentBinding
@@ -14,9 +13,6 @@ class ContentFragment(val item: ItemForAdapter) : Fragment() {
     lateinit var binding:FragmentContentBinding
     val person:ItemForAdapter.Person = item as ItemForAdapter.Person
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,18 +26,27 @@ class ContentFragment(val item: ItemForAdapter) : Fragment() {
             numberPhone.text = person.phoneNumber
         }
         binding.toolbarContent.inflateMenu(R.menu.content_menu)
-        binding.toolbarContent.menu.apply {
-           val edit = this.findItem(R.id.edit_item)
-           val delete = this.findItem(R.id.delete_item)
+        binding.toolbarContent.setTitle(R.string.content_activity)
 
-
+        binding.toolbarContent.setOnMenuItemClickListener {
+            when(it.itemId){
+                R.id.edit_item -> edit()
+                R.id.delete_item -> delete()
+            }
+            return@setOnMenuItemClickListener false
         }
 
-        return inflater.inflate(R.layout.fragment_content, container, false)
+        return binding.root
     }
 
 
+    private fun delete() {
+        Log.d("MenuContent", "delete")
+    }
 
+    private fun edit() {
+        Log.d("MenuContent", "edit")
+    }
 
 
     companion object {

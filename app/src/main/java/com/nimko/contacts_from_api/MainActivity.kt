@@ -28,9 +28,6 @@ class MainActivity : AppCompatActivity(), ClickItem {
         mainFragment()
     }
 
-    override fun onBackPressed() {
-        mainFragment()
-    }
 
     private fun mainFragment(){
         supportFragmentManager.beginTransaction()
