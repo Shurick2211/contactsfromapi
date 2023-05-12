@@ -9,8 +9,13 @@ import com.nimko.contacts_from_api.R
 import com.nimko.contacts_from_api.api_services.ApiClient
 import com.nimko.contacts_from_api.databinding.FragmentContentBinding
 import com.nimko.contacts_from_api.model.ItemForAdapter
+import com.nimko.contacts_from_api.model.MyViewModel
 
-class ContentFragment(val item: ItemForAdapter, val command:Commandable) : Fragment() {
+class ContentFragment(
+    val item: ItemForAdapter,
+    val command:Commandable,
+    val model:MyViewModel
+    ) : Fragment() {
 
     lateinit var binding:FragmentContentBinding
     val person:ItemForAdapter.Person = item as ItemForAdapter.Person
@@ -43,7 +48,7 @@ class ContentFragment(val item: ItemForAdapter, val command:Commandable) : Fragm
 
 
     private fun delete() {
-        ApiClient().deleteContact(person.id!!, activity as MainActivity)
+
         command.goBack()
     }
 
@@ -55,8 +60,8 @@ class ContentFragment(val item: ItemForAdapter, val command:Commandable) : Fragm
     companion object {
 
         @JvmStatic
-        fun newInstance(item:ItemForAdapter, command:Commandable) =
-            ContentFragment(item, command)
+        fun newInstance(item:ItemForAdapter, command:Commandable, model:MyViewModel) =
+            ContentFragment(item, command, model)
 
     }
 }

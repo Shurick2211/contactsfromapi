@@ -24,12 +24,12 @@ import com.nimko.contacts_from_api.model.ItemForAdapter
 import com.nimko.contacts_from_api.model.MyViewModel
 
 
-class MainFragment(val click:ClickItem) : Fragment() {
+class MainFragment(val click:ClickItem, val model:MyViewModel) : Fragment() {
 
     private lateinit var binding:FragmentMainBinding
     private var adapter: MyItemRecyclerViewAdapter? = null
     private var startForResult: ActivityResultLauncher<Intent>? = null
-    private lateinit var model: MyViewModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +62,7 @@ class MainFragment(val click:ClickItem) : Fragment() {
         binding.list.layoutManager = LinearLayoutManager(context)
         binding.list.adapter = adapter
 
-        model = ViewModelProvider(this).get(MyViewModel::class.java)
+
         model.values.observe(viewLifecycleOwner, {
             refreshList(it)
             Log.d("MainActivity", "Observer")
@@ -122,7 +122,7 @@ class MainFragment(val click:ClickItem) : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(click: ClickItem) =
-            MainFragment(click)
+        fun newInstance(click:ClickItem, model:MyViewModel) =
+            MainFragment(click, model)
     }
 }

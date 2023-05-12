@@ -6,19 +6,13 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
-import com.nimko.contacts_from_api.ContentActivity
 import com.nimko.contacts_from_api.R
 import com.nimko.contacts_from_api.model.ItemForAdapter
 
-class AdapterClickListener(
+class AdapterClickCallOrEmail(
     val context: Context
 )
 {
-    fun onClick(item: ItemForAdapter.Person) {
-        val intent = Intent(context, ContentActivity::class.java)
-        intent.putExtra("person", item)
-        context.startActivity(intent)
-    }
 
     fun onClickCall(item: ItemForAdapter.Person) {
         val callIntent = Intent(Intent.ACTION_CALL)

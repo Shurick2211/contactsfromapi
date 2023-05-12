@@ -16,7 +16,7 @@ class PersonViewHolder(val binding: FragmentItemBinding, click: ClickItem) : Ite
 )  {
     override fun bind(item: ItemForAdapter){
         item as ItemForAdapter.Person
-        val clickEmailOrCall = AdapterClickListener(this.itemView.context)
+        val clickEmailOrCall = AdapterClickCallOrEmail(this.itemView.context)
         binding.apply {
             firstName.text = item.firstName
             lastName.text = item.lastName
