@@ -2,11 +2,11 @@ package com.nimko.contacts_from_api.fragment
 
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.nimko.contacts_from_api.MainActivity
 import com.nimko.contacts_from_api.R
-import com.nimko.contacts_from_api.api_services.ApiClient
 import com.nimko.contacts_from_api.databinding.FragmentContentBinding
 import com.nimko.contacts_from_api.model.ItemForAdapter
 import com.nimko.contacts_from_api.model.MyViewModel
