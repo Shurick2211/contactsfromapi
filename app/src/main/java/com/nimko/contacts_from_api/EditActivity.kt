@@ -42,9 +42,9 @@ class EditActivity : AppCompatActivity(), Requestable {
             view.isClickable = false
             person = getPersonFromForm()
             if(!isEdit) {
-                apiClient.createContact(person!!, this)
+               // apiClient.createContact(person!!, this)
             } else {
-                apiClient.editContact(person!!,this)
+              //  apiClient.editContact(person!!,this)
             }
             sleep(1000)
             if (errMess.isNullOrBlank()) {

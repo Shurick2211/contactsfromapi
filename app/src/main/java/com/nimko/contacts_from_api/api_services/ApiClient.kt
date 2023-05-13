@@ -13,25 +13,25 @@ class ApiClient {
     private val url = "http://contacts-book.eba-skm39mww.eu-central-1.elasticbeanstalk.com/contacts"
     private val client: OkHttpClient = OkHttpClient()
 
-    fun createContact(person: ItemForAdapter.Person, apiRequest: Requestable):String{
-        return post(person, apiRequest)
+    fun createContact(person: ItemForAdapter.Person):String?{
+        return post(person)
     }
 
-    fun editContact(person:ItemForAdapter.Person, apiRequest: Requestable):String{
-        return put(person, apiRequest)
+    fun editContact(person:ItemForAdapter.Person):String?{
+        return put(person)
     }
 
-     fun getAllContacts(): String {
+     fun getAllContacts():String? {
 
         return get(url)
     }
 
 
-    fun deleteContact(id:Long):String{
+    fun deleteContact(id:Long):String?{
         return delete(id)
     }
 
-    private fun delete(id: Long): String {
+    private fun delete(id: Long): String? {
         val request =  Request.Builder()
             .url("$url/$id")
             .delete()
@@ -40,29 +40,29 @@ class ApiClient {
     }
 
 
-     fun get(url:String): String {
+     fun get(url:String): String? {
         val request =  Request.Builder()
             .url(url)
             .build();
         return execHttpSync(request)
     }
 
-    private fun put(person:ItemForAdapter.Person, apiRequest: Requestable):String{
+    private fun put(person:ItemForAdapter.Person):String?{
         val jsonRequest = GsonBuilder().create().toJson(person,ItemForAdapter.Person::class.java)
         Log.d("Request Json", jsonRequest)
         val JSON = "application/json; charset=utf-8".toMediaType()
         val body: RequestBody = jsonRequest.toRequestBody(JSON)
         val request = Request.Builder().url(url).put(body).build()
-        return execHttpAsync(request, apiRequest)
+        return execHttpSync(request)
     }
 
-    private fun post(person:ItemForAdapter.Person, apiRequest: Requestable):String{
+    private fun post(person:ItemForAdapter.Person):String?{
         val jsonRequest = GsonBuilder().create().toJson(person,ItemForAdapter.Person::class.java)
         Log.d("Request Json", jsonRequest)
         val JSON = "application/json; charset=utf-8".toMediaType()
         val body: RequestBody = jsonRequest.toRequestBody(JSON)
         val request = Request.Builder().url(url).post(body).build()
-        return execHttpAsync(request, apiRequest)
+        return execHttpSync(request)
     }
 
     private fun execHttpAsync(request: Request, apiRequest: Requestable):String{
@@ -90,8 +90,8 @@ class ApiClient {
         return result
     }
 
-    fun execHttpSync(request: Request):String {
-        var result = "undefined"
+    fun execHttpSync(request: Request):String? {
+        var result:String? = null
         try {
             client.newCall(request).execute().use { response ->
                 if (!response.isSuccessful) {
@@ -100,8 +100,8 @@ class ApiClient {
                     result = response.body?.string().toString()
                 } else {
                     result = response.body?.string().toString()
-                    if (result.isBlank()) result = response.code.toString()
-                    Log.d("Http OK", result)
+                    if (result.isNullOrBlank()) result = response.code.toString()
+                    Log.d("Http OK", result ?: response.code.toString())
                 }
             }
         } catch (e: IOException) {

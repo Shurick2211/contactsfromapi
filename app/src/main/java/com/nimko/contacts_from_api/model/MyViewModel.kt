@@ -22,7 +22,6 @@ class MyViewModel : ViewModel() {
                 val response = async {
                     client.getAllContacts()
                 }.await()
-                Log.d("ViewModel", response)
                 val sType = object : TypeToken<List<ItemForAdapter.Person>>() {}.type
                 values.postValue(Gson().fromJson<List<ItemForAdapter.Person>>(response, sType).toMutableList())
         }
@@ -43,7 +42,6 @@ class MyViewModel : ViewModel() {
             val response = async {
                 client.deleteContact(id)
             }.await()
-            Log.d("ViewModel", response)
             if(response == "200"){
                 values.value!!.remove(getContactById(id))
             }
@@ -54,13 +52,34 @@ class MyViewModel : ViewModel() {
         return values.value?.find { person ->  person.id == id}
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     fun createContact(person: ItemForAdapter.Person):String?{
-        Log.d("ViewModel", "Create $person")
+        GlobalScope.launch {
+            val response = async {
+                client.createContact(person)
+            }.await()
+            try {
+                val contact = Gson().fromJson(response,ItemForAdapter.Person::class.java)
+            } catch (e:Exception){
+                Log.e("ViewModel", "Edit $response")
+            }
+        }
+
         return null
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     fun editContact(person: ItemForAdapter.Person):String?{
-        Log.d("ViewModel", "Edit $person")
+        GlobalScope.launch {
+            val response = async {
+                client.editContact(person)
+            }.await()
+            try {
+                val contact = Gson().fromJson(response,ItemForAdapter.Person::class.java)
+            } catch (e:Exception){
+                Log.e("ViewModel", "Edit $response")
+            }
+        }
         return null
     }
 

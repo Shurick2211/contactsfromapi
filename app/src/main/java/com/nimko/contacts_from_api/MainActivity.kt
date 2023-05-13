@@ -39,6 +39,8 @@ class MainActivity : AppCompatActivity(), ClickItem, Commandable {
             .commit()
         checkPermission()
     }
+
+
     private fun checkPermission() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CALL_PHONE) !=
             PackageManager.PERMISSION_GRANTED
