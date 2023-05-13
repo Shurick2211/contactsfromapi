@@ -38,16 +38,20 @@ class MyViewModel : ViewModel() {
     }
 
     @OptIn(DelicateCoroutinesApi::class)
-    fun delete(item: ItemForAdapter.Person){
+    fun delete(id: Long){
         GlobalScope.launch {
             val response = async {
-                client.deleteContact(item.id!!)
+                client.deleteContact(id)
             }.await()
             Log.d("ViewModel", response)
             if(response == "200"){
-                values.value!!.remove(item)
+                values.value!!.remove(getContactById(id))
             }
         }
+    }
+
+    fun getContactById(id:Long): ItemForAdapter.Person?{
+        return values.value?.find { person ->  person.id == id}
     }
 
 

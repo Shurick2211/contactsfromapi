@@ -74,7 +74,11 @@ class MainActivity : AppCompatActivity(), ClickItem, Commandable {
     override fun click(item: ItemForAdapter) {
         supportFragmentManager.beginTransaction()
             .addToBackStack(null)
-            .replace(R.id.fragmentContainerView, ContentFragment.newInstance(item, this, model))
+            .replace(R.id.fragmentContainerView,
+                ContentFragment.newInstance(
+                    (item as ItemForAdapter.Person).id!!,
+                    this,
+                    model))
             .commit()
     }
 

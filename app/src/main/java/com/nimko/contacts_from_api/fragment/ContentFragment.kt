@@ -11,13 +11,13 @@ import com.nimko.contacts_from_api.model.ItemForAdapter
 import com.nimko.contacts_from_api.model.MyViewModel
 
 class ContentFragment(
-    val item: ItemForAdapter,
+    val id:Long,
     val command:Commandable,
     val model:MyViewModel
     ) : Fragment() {
 
     lateinit var binding:FragmentContentBinding
-    val person:ItemForAdapter.Person = item as ItemForAdapter.Person
+    lateinit var person:ItemForAdapter.Person
 
 
     override fun onCreateView(
@@ -25,12 +25,7 @@ class ContentFragment(
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentContentBinding.inflate(inflater,container,false)
-        binding.apply {
-            nameFirst.text = person.firstName
-            nameLast.text = person.lastName
-            emaill.text = person.email
-            numberPhone.text = person.phoneNumber
-        }
+
         binding.toolbarContent.inflateMenu(R.menu.content_menu)
         binding.toolbarContent.setTitle(R.string.content_activity)
 
@@ -45,9 +40,20 @@ class ContentFragment(
         return binding.root
     }
 
+    override fun onResume() {
+        person = model.getContactById(id)!!
+        binding.apply {
+            nameFirst.text = person.firstName
+            nameLast.text = person.lastName
+            emaill.text = person.email
+            numberPhone.text = person.phoneNumber
+        }
+        super.onResume()
+    }
+
 
     private fun delete() {
-        model.delete(person)
+        model.delete(person.id!!)
         command.goBack()
     }
 
@@ -59,8 +65,8 @@ class ContentFragment(
     companion object {
 
         @JvmStatic
-        fun newInstance(item:ItemForAdapter, command:Commandable, model:MyViewModel) =
-            ContentFragment(item, command, model)
+        fun newInstance(id: Long, command:Commandable, model:MyViewModel) =
+            ContentFragment(id, command, model)
 
     }
 }
