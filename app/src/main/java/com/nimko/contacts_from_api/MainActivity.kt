@@ -14,7 +14,6 @@ import com.nimko.contacts_from_api.databinding.ActivityMainBinding
 import com.nimko.contacts_from_api.fragment.Commandable
 import com.nimko.contacts_from_api.fragment.ContentFragment
 import com.nimko.contacts_from_api.fragment.MainFragment
-import com.nimko.contacts_from_api.model.ItemForAdapter
 import com.nimko.contacts_from_api.model.MyViewModel
 
 
@@ -86,10 +85,10 @@ class MainActivity : AppCompatActivity(), ClickItem, Commandable {
         onBackPressed()
     }
 
-    override fun edit(item:ItemForAdapter.Person) {
-        Log.d("MainActivity", "Edit $item")
+    override fun edit(id: Long) {
+        Log.d("MainActivity", "Edit $id")
         val intent = Intent(this, EditActivity::class.java)
-        intent.putExtra("personForEdit", item)
+        intent.putExtra("personForEdit", model.getContactById(id))
         startActivity(intent)
     }
 }

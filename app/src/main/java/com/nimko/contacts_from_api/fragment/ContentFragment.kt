@@ -53,12 +53,12 @@ class ContentFragment(
 
 
     private fun delete() {
-        model.delete(person.id!!)
+        model.delete(id)
         command.goBack()
     }
 
     private fun edit() {
-        command.edit(person)
+        command.edit(id)
     }
 
 
