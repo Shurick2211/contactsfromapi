@@ -20,7 +20,7 @@ class PersonViewHolder(val binding: FragmentItemBinding, click: ClickItem) : Ite
         binding.apply {
             firstName.text = item.firstName
             lastName.text = item.lastName
-            itemView.setOnClickListener { click.click(item) }
+            itemView.setOnClickListener { click.click(item.id!!) }
             binding.callButton.setOnClickListener { clickEmailOrCall.onClickCall(item) }
             binding.emailButton.setOnClickListener { clickEmailOrCall.onClickEmail(item) }
         }

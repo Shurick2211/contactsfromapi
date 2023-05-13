@@ -34,16 +34,6 @@ class MyItemRecyclerViewAdapter(val clickItem: ClickItem): RecyclerView.Adapter<
     }
 
 
-    fun addNewPerson(person:ItemForAdapter){
-        values.add(person)
-        refresh()
-    }
-    fun addAllPersons(persons:Collection<ItemForAdapter>){
-        values.clear()
-        values.addAll(persons)
-        refresh()
-    }
-
     @SuppressLint("NotifyDataSetChanged")
     fun refresh(){
         this.notifyDataSetChanged()

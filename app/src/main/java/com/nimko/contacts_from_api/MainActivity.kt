@@ -71,12 +71,12 @@ class MainActivity : AppCompatActivity(), ClickItem, Commandable {
         const val ACCESS = 1
     }
 
-    override fun click(item: ItemForAdapter) {
+    override fun click(id:Long) {
         supportFragmentManager.beginTransaction()
             .addToBackStack(null)
             .replace(R.id.fragmentContainerView,
                 ContentFragment.newInstance(
-                    (item as ItemForAdapter.Person).id!!,
+                   id,
                     this,
                     model))
             .commit()
