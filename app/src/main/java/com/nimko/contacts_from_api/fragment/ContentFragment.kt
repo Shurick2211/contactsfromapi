@@ -24,7 +24,7 @@ class ContentFragment(
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentContentBinding.inflate(inflater,container,false)
         binding.apply {
             nameFirst.text = person.firstName
@@ -48,11 +48,12 @@ class ContentFragment(
 
 
     private fun delete() {
-
+        model.delete(person)
         command.goBack()
     }
 
     private fun edit() {
+
         Log.d("MenuContent", "edit")
     }
 

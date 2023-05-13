@@ -9,7 +9,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.nimko.contacts_from_api.adapter.ClickItem
-import com.nimko.contacts_from_api.api_services.Requestable
 import com.nimko.contacts_from_api.databinding.ActivityMainBinding
 import com.nimko.contacts_from_api.fragment.Commandable
 import com.nimko.contacts_from_api.fragment.ContentFragment
@@ -18,7 +17,7 @@ import com.nimko.contacts_from_api.model.ItemForAdapter
 import com.nimko.contacts_from_api.model.MyViewModel
 
 
-class MainActivity : AppCompatActivity(), ClickItem, Requestable, Commandable {
+class MainActivity : AppCompatActivity(), ClickItem, Commandable {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var model: MyViewModel
@@ -67,8 +66,6 @@ class MainActivity : AppCompatActivity(), ClickItem, Requestable, Commandable {
         }
     }
 
-
-
     private companion object {
         const val ACCESS = 1
     }
@@ -78,10 +75,6 @@ class MainActivity : AppCompatActivity(), ClickItem, Requestable, Commandable {
             .addToBackStack(null)
             .replace(R.id.fragmentContainerView, ContentFragment.newInstance(item, this, model))
             .commit()
-    }
-
-    override fun getRequest(request: String) {
-       Log.d("Response Main", request)
     }
 
     override fun goBack() {

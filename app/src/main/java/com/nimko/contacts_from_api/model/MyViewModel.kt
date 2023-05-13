@@ -19,12 +19,12 @@ class MyViewModel : ViewModel() {
     @OptIn(DelicateCoroutinesApi::class)
     fun apiReq() {
         GlobalScope.launch {
-                val request = async {
+                val response = async {
                     client.getAllContacts()
                 }.await()
-                Log.d("ViewModel", request)
+                Log.d("ViewModel", response)
                 val sType = object : TypeToken<List<ItemForAdapter.Person>>() {}.type
-                values.postValue(Gson().fromJson<List<ItemForAdapter.Person>>(request, sType).toMutableList())
+                values.postValue(Gson().fromJson<List<ItemForAdapter.Person>>(response, sType).toMutableList())
         }
     }
 
@@ -37,6 +37,18 @@ class MyViewModel : ViewModel() {
         } else values.value!!.toMutableList()
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
+    fun delete(item: ItemForAdapter.Person){
+        GlobalScope.launch {
+            val response = async {
+                client.deleteContact(item.id!!)
+            }.await()
+            Log.d("ViewModel", response)
+            if(response == "200"){
+                values.value!!.remove(item)
+            }
+        }
+    }
 
 
 

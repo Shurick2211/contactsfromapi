@@ -3,8 +3,6 @@ package com.nimko.contacts_from_api.api_services
 import android.util.Log
 import com.google.gson.GsonBuilder
 import com.nimko.contacts_from_api.model.ItemForAdapter
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -32,16 +30,16 @@ class ApiClient {
 //        return get("$url/$email", apiRequest)
 //    }
 
-    fun deleteContact(id:Long, apiRequest: Requestable):String{
-        return delete(id, apiRequest)
+    fun deleteContact(id:Long):String{
+        return delete(id)
     }
 
-    private fun delete(id: Long, apiRequest: Requestable): String {
+    private fun delete(id: Long): String {
         val request =  Request.Builder()
             .url("$url/$id")
             .delete()
             .build()
-        return execHttpAsync(request, apiRequest)
+        return execHttpSync(request)
     }
 
 //    fun getContactByPhone(phone:String, apiRequest: Requestable):String{
@@ -103,16 +101,17 @@ class ApiClient {
         try {
             client.newCall(request).execute().use { response ->
                 if (!response.isSuccessful) {
-                    Log.e("Error http",
+                    Log.e("Http Error",
                         " ${response.code} ${response.message}")
-                    result = response.body?.string() ?: "${response.code}"
+                    result = response.body?.string().toString()
                 } else {
-                    result = response.body?.string() ?: "${response.code}"
+                    result = response.body?.string().toString()
+                    if (result.isBlank()) result = response.code.toString()
                     Log.d("Http OK", result)
                 }
             }
         } catch (e: IOException) {
-            Log.e("Error http", e.stackTraceToString())
+            Log.e("Error http connection", e.stackTraceToString())
         }
         return result
     }
