@@ -54,6 +54,14 @@ class MyViewModel : ViewModel() {
         return values.value?.find { person ->  person.id == id}
     }
 
+    fun createContact(person: ItemForAdapter.Person):String?{
+        Log.d("ViewModel", "Create $person")
+        return null
+    }
 
+    fun editContact(person: ItemForAdapter.Person):String?{
+        Log.d("ViewModel", "Edit $person")
+        return null
+    }
 
 }

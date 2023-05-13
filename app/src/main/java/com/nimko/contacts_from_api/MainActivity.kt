@@ -1,6 +1,5 @@
 package com.nimko.contacts_from_api
 
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +12,7 @@ import com.nimko.contacts_from_api.adapter.ClickItem
 import com.nimko.contacts_from_api.databinding.ActivityMainBinding
 import com.nimko.contacts_from_api.fragment.Commandable
 import com.nimko.contacts_from_api.fragment.ContentFragment
+import com.nimko.contacts_from_api.fragment.EditFragment
 import com.nimko.contacts_from_api.fragment.MainFragment
 import com.nimko.contacts_from_api.model.MyViewModel
 
@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity(), ClickItem, Commandable {
 
     private fun mainFragment(){
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainerView, MainFragment.newInstance(this, model))
+            .replace(R.id.fragmentContainerView, MainFragment.newInstance(this, model, this))
             .commit()
         checkPermission()
     }
@@ -85,11 +85,16 @@ class MainActivity : AppCompatActivity(), ClickItem, Commandable {
         onBackPressed()
     }
 
-    override fun edit(id: Long) {
+    override fun edit(id: Long?) {
         Log.d("MainActivity", "Edit $id")
-        val intent = Intent(this, EditActivity::class.java)
-        intent.putExtra("personForEdit", model.getContactById(id))
-        startActivity(intent)
+        supportFragmentManager.beginTransaction()
+            .addToBackStack(null)
+            .replace(R.id.fragmentContainerView,
+                EditFragment.newInstance(
+                    id,
+                    model,
+                    this))
+            .commit()
     }
 }
 

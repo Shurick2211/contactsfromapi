@@ -1,6 +1,5 @@
 package com.nimko.contacts_from_api.fragment
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -9,12 +8,9 @@ import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.nimko.contacts_from_api.EditActivity
 import com.nimko.contacts_from_api.R
 import com.nimko.contacts_from_api.adapter.ClickItem
 import com.nimko.contacts_from_api.adapter.MyItemRecyclerViewAdapter
@@ -23,7 +19,7 @@ import com.nimko.contacts_from_api.model.ItemForAdapter
 import com.nimko.contacts_from_api.model.MyViewModel
 
 
-class MainFragment(val click:ClickItem, val model:MyViewModel) : Fragment() {
+class MainFragment(val click:ClickItem, val model:MyViewModel, val command:Commandable) : Fragment() {
 
     private lateinit var binding:FragmentMainBinding
     private var adapter: MyItemRecyclerViewAdapter? = null
@@ -46,17 +42,9 @@ class MainFragment(val click:ClickItem, val model:MyViewModel) : Fragment() {
             onCreateOptionsMenu(this)
         }
         binding.buttonAdd.setOnClickListener {
-            startForResult?.launch(Intent(activity, EditActivity::class.java))
+            command.edit(null)
         }
 
-        startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-        { result: ActivityResult ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val intent = result.data
-                val person = intent?.getSerializableExtra("new_person") as ItemForAdapter.Person
-                Log.d("MainActivity result", person.toString())
-            }
-        }
         adapter = MyItemRecyclerViewAdapter(click)
         binding.list.layoutManager = LinearLayoutManager(context)
         binding.list.adapter = adapter
@@ -121,7 +109,7 @@ class MainFragment(val click:ClickItem, val model:MyViewModel) : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(click:ClickItem, model:MyViewModel) =
-            MainFragment(click, model)
+        fun newInstance(click:ClickItem, model:MyViewModel, command: Commandable) =
+            MainFragment(click, model, command)
     }
 }
