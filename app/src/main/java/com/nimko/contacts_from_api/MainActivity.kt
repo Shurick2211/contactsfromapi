@@ -1,5 +1,6 @@
 package com.nimko.contacts_from_api
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -79,6 +80,13 @@ class MainActivity : AppCompatActivity(), ClickItem, Commandable {
 
     override fun goBack() {
         onBackPressed()
+    }
+
+    override fun edit(item:ItemForAdapter.Person) {
+        Log.d("MainActivity", "Edit $item")
+        val intent = Intent(this, EditActivity::class.java)
+        intent.putExtra("personForEdit", item)
+        startActivity(intent)
     }
 }
 

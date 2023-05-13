@@ -26,9 +26,6 @@ class ApiClient {
         return get(url)
     }
 
-//    fun getContactByEmail(email:String, apiRequest: Requestable):String{
-//        return get("$url/$email", apiRequest)
-//    }
 
     fun deleteContact(id:Long):String{
         return delete(id)
@@ -42,15 +39,12 @@ class ApiClient {
         return execHttpSync(request)
     }
 
-//    fun getContactByPhone(phone:String, apiRequest: Requestable):String{
-//        return get("$url/phones?phone=$phone", apiRequest)
-//    }
 
      fun get(url:String): String {
         val request =  Request.Builder()
             .url(url)
             .build();
-        return execHttpSync(request)//execHttpAsync(request, apiRequest)
+        return execHttpSync(request)
     }
 
     private fun put(person:ItemForAdapter.Person, apiRequest: Requestable):String{

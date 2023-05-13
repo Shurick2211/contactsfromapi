@@ -1,7 +1,6 @@
 package com.nimko.contacts_from_api.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,8 +52,7 @@ class ContentFragment(
     }
 
     private fun edit() {
-
-        Log.d("MenuContent", "edit")
+        command.edit(person)
     }
 
 
