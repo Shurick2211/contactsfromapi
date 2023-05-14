@@ -1,6 +1,7 @@
 package com.nimko.contacts_from_api.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,6 +43,7 @@ class ContentFragment(
 
     override fun onResume() {
         person = model.getContactById(id)!!
+        Log.d("ContentFragment","resume $person")
         binding.apply {
             nameFirst.text = person.firstName
             nameLast.text = person.lastName

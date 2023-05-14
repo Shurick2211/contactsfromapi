@@ -6,13 +6,11 @@ import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.nimko.contacts_from_api.api_services.ApiClient
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class MyViewModel : ViewModel() {
     var values: MutableLiveData<MutableList<ItemForAdapter.Person>> = MutableLiveData()
+    var responseData: MutableLiveData<String> = MutableLiveData()
     private val client = ApiClient()
 
 
@@ -53,34 +51,38 @@ class MyViewModel : ViewModel() {
     }
 
     @OptIn(DelicateCoroutinesApi::class)
-    fun createContact(person: ItemForAdapter.Person):String?{
+    fun createContact(person: ItemForAdapter.Person){
         GlobalScope.launch {
             val response = async {
                 client.createContact(person)
             }.await()
             try {
                 val contact = Gson().fromJson(response,ItemForAdapter.Person::class.java)
+                values.value!!.add(contact)
+                responseData.postValue("")
             } catch (e:Exception){
-                Log.e("ViewModel", "Edit $response")
+                responseData.postValue(response)
+                Log.w("ViewModel", "Create error $response")
             }
         }
-
-        return null
     }
 
     @OptIn(DelicateCoroutinesApi::class)
-    fun editContact(person: ItemForAdapter.Person):String?{
+    fun editContact(person: ItemForAdapter.Person){
+        val index = values.value!!.indexOf(getContactById(person.id!!))
         GlobalScope.launch {
             val response = async {
                 client.editContact(person)
             }.await()
             try {
                 val contact = Gson().fromJson(response,ItemForAdapter.Person::class.java)
+                values.value!!.set( index, contact)
+                responseData.postValue("")
             } catch (e:Exception){
-                Log.e("ViewModel", "Edit $response")
+                responseData.postValue(response)
+                Log.w("ViewModel", "Edit error $response")
             }
         }
-        return null
     }
 
 }

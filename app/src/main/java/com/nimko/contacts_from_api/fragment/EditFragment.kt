@@ -19,7 +19,7 @@ class EditFragment(
     lateinit var binding: FragmentEditBinding
     lateinit var person: ItemForAdapter.Person
     private var isEdit = false
-    private var errMess:String? = null
+    lateinit var bottomOk:View
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,6 +30,14 @@ class EditFragment(
         binding.buttonOk.setOnClickListener {
             clickOk(it)
         }
+        model.responseData.observe(viewLifecycleOwner,{
+            if(it.isBlank()) {
+                command.goBack()
+            } else {
+                binding.errorText.text = it
+                bottomOk.isClickable = true
+            }
+        })
         return binding.root
     }
 
@@ -40,20 +48,15 @@ class EditFragment(
             && binding.phoneNumber.text.isNotBlank()) {
             view.isClickable = false
             person = getPersonFromForm()
-            errMess = if(!isEdit) {
+            bottomOk = view
+            if(!isEdit) {
                 model.createContact(person)
             } else {
                 model.editContact(person)
             }
-            if (errMess.isNullOrBlank()) {
-               command.goBack()
-            }
         } else {
-            errMess = getString(R.string.error_add)
+            binding.errorText.text = getString(R.string.error_add)
         }
-        binding.errorText.text = errMess
-        errMess = null
-        view.isClickable = true
     }
 
     override fun onResume() {
