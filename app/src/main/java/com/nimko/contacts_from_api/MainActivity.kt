@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity(), ClickItem, Commandable {
         supportActionBar?.hide()
         model = ViewModelProvider(this).get(MyViewModel::class.java)
         mainFragment()
+        checkPermission()
     }
 
 
@@ -37,7 +38,6 @@ class MainActivity : AppCompatActivity(), ClickItem, Commandable {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainerView, MainFragment.newInstance(this, model, this))
             .commit()
-        checkPermission()
     }
 
 
@@ -74,28 +74,28 @@ class MainActivity : AppCompatActivity(), ClickItem, Commandable {
 
     override fun click(id:Long) {
         supportFragmentManager.beginTransaction()
-            .addToBackStack(null)
             .replace(R.id.fragmentContainerView,
                 ContentFragment.newInstance(
                    id,
                     this,
                     model))
+            .addToBackStack(null)
             .commit()
     }
 
     override fun goBack() {
-        onBackPressed()
+
+        onBackPressedDispatcher.onBackPressed()
     }
 
     override fun edit(id: Long?) {
-        Log.d("MainActivity", "Edit $id")
         supportFragmentManager.beginTransaction()
-            .addToBackStack(null)
             .replace(R.id.fragmentContainerView,
                 EditFragment.newInstance(
                     id,
                     model,
                     this))
+            .addToBackStack(null)
             .commit()
     }
 }
