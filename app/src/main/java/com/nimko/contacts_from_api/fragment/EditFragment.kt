@@ -96,7 +96,7 @@ class EditFragment : Fragment() {
     }
 
     companion object {
-        private const val ID = "ID"
+        private const val ID = "ID_EDIT"
 
         @JvmStatic
         fun newInstance(id: Long?) =

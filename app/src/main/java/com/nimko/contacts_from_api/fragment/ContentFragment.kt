@@ -72,7 +72,7 @@ class ContentFragment:Fragment() {
 
 
     companion object {
-        private const val ID = "ID"
+        private const val ID = "ID_CONTENT"
         @JvmStatic
         fun newInstance(id:Long) =
             ContentFragment().apply {
