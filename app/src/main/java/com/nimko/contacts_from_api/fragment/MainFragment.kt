@@ -11,6 +11,7 @@ import android.widget.SearchView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.nimko.contacts_from_api.MainActivity
 import com.nimko.contacts_from_api.R
 import com.nimko.contacts_from_api.adapter.ClickItem
 import com.nimko.contacts_from_api.adapter.MyItemRecyclerViewAdapter
@@ -19,13 +20,14 @@ import com.nimko.contacts_from_api.model.ItemForAdapter
 import com.nimko.contacts_from_api.model.MyViewModel
 
 
-class MainFragment(val click:ClickItem, val model:MyViewModel, val command:Commandable) : Fragment() {
+class MainFragment : Fragment() {
 
     private lateinit var binding:FragmentMainBinding
     private var adapter: MyItemRecyclerViewAdapter? = null
     private var startForResult: ActivityResultLauncher<Intent>? = null
-
-
+    val click:ClickItem = activity as MainActivity
+    val model:MyViewModel = (activity as MainActivity).model
+    val command:Commandable = activity as MainActivity
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -109,7 +111,7 @@ class MainFragment(val click:ClickItem, val model:MyViewModel, val command:Comma
 
     companion object {
         @JvmStatic
-        fun newInstance(click:ClickItem, model:MyViewModel, command: Commandable) =
-            MainFragment(click, model, command)
+        fun newInstance() =
+            MainFragment()
     }
 }

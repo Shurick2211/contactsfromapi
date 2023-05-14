@@ -20,8 +20,8 @@ import com.nimko.contacts_from_api.model.MyViewModel
 class MainActivity : AppCompatActivity(), ClickItem, Commandable {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var model: MyViewModel
-
+    lateinit var model: MyViewModel
+   // private lateinit var navigator:NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,14 +29,16 @@ class MainActivity : AppCompatActivity(), ClickItem, Commandable {
         setContentView(binding.root)
         supportActionBar?.hide()
         model = ViewModelProvider(this).get(MyViewModel::class.java)
+
         mainFragment()
         checkPermission()
+       // navigator = Navigation.findNavController(this,R.id.main_nav)
     }
 
 
     private fun mainFragment(){
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainerView, MainFragment.newInstance(this, model, this))
+            .replace(R.id.fragmentContainerView, MainFragment.newInstance())
             .commit()
     }
 
@@ -68,17 +70,13 @@ class MainActivity : AppCompatActivity(), ClickItem, Commandable {
         }
     }
 
-    private companion object {
-        const val ACCESS = 1
-    }
+
 
     override fun click(id:Long) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainerView,
                 ContentFragment.newInstance(
-                   id,
-                    this,
-                    model))
+                   id))
             .addToBackStack(null)
             .commit()
     }
@@ -92,11 +90,14 @@ class MainActivity : AppCompatActivity(), ClickItem, Commandable {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainerView,
                 EditFragment.newInstance(
-                    id,
-                    model,
-                    this))
+                    id))
             .addToBackStack(null)
             .commit()
+    }
+
+    companion object {
+       private const val ACCESS = 1
+
     }
 }
 

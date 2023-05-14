@@ -6,20 +6,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.nimko.contacts_from_api.MainActivity
 import com.nimko.contacts_from_api.R
 import com.nimko.contacts_from_api.databinding.FragmentContentBinding
 import com.nimko.contacts_from_api.model.ItemForAdapter
 import com.nimko.contacts_from_api.model.MyViewModel
 
-class ContentFragment(
-    val id:Long,
-    val command:Commandable,
-    val model:MyViewModel
-    ) : Fragment() {
-
+class ContentFragment:Fragment() {
+    var id:Long? = null
     lateinit var binding:FragmentContentBinding
     lateinit var person:ItemForAdapter.Person
+    val command:Commandable = activity as MainActivity
+    val model:MyViewModel = (activity as MainActivity).model
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            id = it.getLong(ContentFragment.ID)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +47,7 @@ class ContentFragment(
     }
 
     override fun onResume() {
-        person = model.getContactById(id)!!
+        person = model.getContactById(id!!)!!
         Log.d("ContentFragment","resume $person")
         binding.apply {
             nameFirst.text = person.firstName
@@ -55,7 +60,7 @@ class ContentFragment(
 
 
     private fun delete() {
-        model.delete(id)
+        model.delete(id!!)
         command.goBack()
     }
 
@@ -65,10 +70,13 @@ class ContentFragment(
 
 
     companion object {
-
+        private const val ID = "ID"
         @JvmStatic
-        fun newInstance(id: Long, command:Commandable, model:MyViewModel) =
-            ContentFragment(id, command, model)
-
+        fun newInstance(id:Long) =
+            ContentFragment().apply {
+                arguments = Bundle().apply {
+                    putLong(ID, id)
+                }
+            }
     }
 }
