@@ -16,14 +16,16 @@ class ContentFragment:Fragment() {
     var id:Long? = null
     lateinit var binding:FragmentContentBinding
     lateinit var person:ItemForAdapter.Person
-    val command:Commandable = activity as MainActivity
-    val model:MyViewModel = (activity as MainActivity).model
+    lateinit var model:MyViewModel
+    lateinit var command:Commandable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             id = it.getLong(ContentFragment.ID)
         }
+        command = activity as MainActivity
+        model = (activity as MainActivity).model
     }
 
     override fun onCreateView(

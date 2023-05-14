@@ -17,14 +17,16 @@ class EditFragment : Fragment() {
     lateinit var person: ItemForAdapter.Person
     private var isEdit = false
     lateinit var bottomOk: View
-    val model: MyViewModel = (activity as MainActivity).model
-    val command: Commandable = activity as MainActivity
+    lateinit var model:MyViewModel
+    lateinit var command:Commandable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             id = it.getLong(ID)
         }
+        command = activity as MainActivity
+        model = (activity as MainActivity).model
     }
 
     override fun onCreateView(

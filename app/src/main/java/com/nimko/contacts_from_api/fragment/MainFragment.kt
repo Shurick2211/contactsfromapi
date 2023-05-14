@@ -1,6 +1,5 @@
 package com.nimko.contacts_from_api.fragment
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,7 +7,6 @@ import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
-import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nimko.contacts_from_api.MainActivity
@@ -24,13 +22,14 @@ class MainFragment : Fragment() {
 
     private lateinit var binding:FragmentMainBinding
     private var adapter: MyItemRecyclerViewAdapter? = null
-    private var startForResult: ActivityResultLauncher<Intent>? = null
-    val click:ClickItem = activity as MainActivity
-    val model:MyViewModel = (activity as MainActivity).model
-    val command:Commandable = activity as MainActivity
+    lateinit var click:ClickItem
+    lateinit var model:MyViewModel
+    lateinit var command:Commandable
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        click = activity as MainActivity
+        command = activity as MainActivity
+        model = (activity as MainActivity).model
     }
 
     override fun onCreateView(

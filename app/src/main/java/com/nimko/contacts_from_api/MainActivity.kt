@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity(), ClickItem, Commandable {
 
     private lateinit var binding: ActivityMainBinding
     lateinit var model: MyViewModel
-   // private lateinit var navigator:NavController
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity(), ClickItem, Commandable {
 
         mainFragment()
         checkPermission()
-       // navigator = Navigation.findNavController(this,R.id.main_nav)
+
     }
 
 
@@ -82,7 +82,6 @@ class MainActivity : AppCompatActivity(), ClickItem, Commandable {
     }
 
     override fun goBack() {
-
         onBackPressedDispatcher.onBackPressed()
     }
 
