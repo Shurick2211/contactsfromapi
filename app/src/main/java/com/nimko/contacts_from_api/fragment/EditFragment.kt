@@ -60,17 +60,17 @@ class EditFragment : Fragment() {
             } else {
                 model.editContact(person)
             }
-            model.responseData.observe(viewLifecycleOwner, {
-                    Log.d("EditFragObserve", it)
-                    if (it.isBlank()) {
-                        GlobalScope.launch(Dispatchers.Main) {
-                            command.goBack()
-                        }
-                    } else {
-                        binding.errorText.text = it
-                        bottomOk.isClickable = true
+            model.responseData.observe(viewLifecycleOwner) {
+                Log.d("EditFragObserve", it)
+                if (it.isBlank()) {
+                    GlobalScope.launch(Dispatchers.Main) {
+                        command.goBack()
                     }
-            })
+                } else {
+                    binding.errorText.text = it
+                    bottomOk.isClickable = true
+                }
+            }
         } else {
             binding.errorText.text = getString(R.string.error_add)
         }
