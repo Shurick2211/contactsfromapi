@@ -54,13 +54,13 @@ class EditFragment : Fragment() {
         ) {
             view.isClickable = false
             person = getPersonFromForm()
-            bottomOk = view
+
             if (!isEdit) {
                 model.createContact(person)
             } else {
                 model.editContact(person)
             }
-            model.responseData.observe(viewLifecycleOwner) {
+            model.responseData.observe(this, {
                 Log.d("EditFragObserve", it)
                 if (it.isBlank()) {
                     GlobalScope.launch(Dispatchers.Main) {
@@ -68,9 +68,9 @@ class EditFragment : Fragment() {
                     }
                 } else {
                     binding.errorText.text = it
-                    bottomOk.isClickable = true
+                    view.isClickable = true
                 }
-            }
+            })
         } else {
             binding.errorText.text = getString(R.string.error_add)
         }
