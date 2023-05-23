@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity(), ClickItem, Commandable {
     }
 
     override fun goBack() {
-
+        Log.d("MainActivity", "GoBack")
         onBackPressedDispatcher.onBackPressed()
     }
 

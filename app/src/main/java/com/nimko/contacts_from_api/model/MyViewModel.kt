@@ -16,7 +16,7 @@ class MyViewModel : ViewModel() {
 
     @OptIn(DelicateCoroutinesApi::class)
     fun apiReq() {
-        GlobalScope.launch {
+        GlobalScope.launch(Dispatchers.IO) {
                 val response = async {
                     client.getAllContacts()
                 }.await()
@@ -36,7 +36,7 @@ class MyViewModel : ViewModel() {
 
     @OptIn(DelicateCoroutinesApi::class)
     fun delete(id: Long){
-        GlobalScope.launch {
+        GlobalScope.launch(Dispatchers.IO) {
             val response = async {
                 client.deleteContact(id)
             }.await()
@@ -52,7 +52,7 @@ class MyViewModel : ViewModel() {
 
     @OptIn(DelicateCoroutinesApi::class)
     fun createContact(person: ItemForAdapter.Person){
-        GlobalScope.launch {
+        GlobalScope.launch(Dispatchers.IO) {
             val response = async {
                 client.createContact(person)
             }.await()
@@ -70,7 +70,7 @@ class MyViewModel : ViewModel() {
     @OptIn(DelicateCoroutinesApi::class)
     fun editContact(person: ItemForAdapter.Person){
         val index = values.value!!.indexOf(getContactById(person.id!!))
-        GlobalScope.launch {
+        GlobalScope.launch(Dispatchers.IO) {
             val response = async {
                 client.editContact(person)
             }.await()

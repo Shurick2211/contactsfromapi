@@ -1,6 +1,7 @@
 package com.nimko.contacts_from_api.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import com.nimko.contacts_from_api.R
 import com.nimko.contacts_from_api.databinding.FragmentEditBinding
 import com.nimko.contacts_from_api.model.ItemForAdapter
 import com.nimko.contacts_from_api.model.MyViewModel
+import kotlinx.coroutines.*
 
 class EditFragment : Fragment() {
     var id: Long? = null
@@ -29,6 +31,7 @@ class EditFragment : Fragment() {
         model = (activity as MainActivity).model
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,17 +41,11 @@ class EditFragment : Fragment() {
         binding.buttonOk.setOnClickListener {
             clickOk(it)
         }
-        model.responseData.observe(viewLifecycleOwner, {
-            if (it.isBlank()) {
-                command.goBack()
-            } else {
-                binding.errorText.text = it
-                bottomOk.isClickable = true
-            }
-        })
+
         return binding.root
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     fun clickOk(view: View) {
         if (binding.firstName.text.isNotBlank()
             && binding.lastName.text.isNotBlank()
@@ -63,6 +60,17 @@ class EditFragment : Fragment() {
             } else {
                 model.editContact(person)
             }
+            model.responseData.observe(viewLifecycleOwner, {
+                    Log.d("EditFragObserve", it)
+                    if (it.isBlank()) {
+                        GlobalScope.launch(Dispatchers.Main) {
+                            command.goBack()
+                        }
+                    } else {
+                        binding.errorText.text = it
+                        bottomOk.isClickable = true
+                    }
+            })
         } else {
             binding.errorText.text = getString(R.string.error_add)
         }
